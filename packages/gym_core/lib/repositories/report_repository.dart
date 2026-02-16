@@ -1,7 +1,9 @@
 import 'package:gym_core/repositories/api_repository.dart';
 
 class ReportRepository {
-  final ApiRepository _apiRepository = ApiRepository();
+  final ApiRepository _apiRepository;
+
+  ReportRepository(this._apiRepository);
 
   Future<Map<String, dynamic>> getDashboardStats() async {
     final response = await _apiRepository.get('/reports/dashboard');

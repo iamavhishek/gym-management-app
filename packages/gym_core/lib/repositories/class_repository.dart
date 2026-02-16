@@ -2,12 +2,16 @@ import 'package:gym_core/models/class_model.dart';
 import 'package:gym_core/repositories/api_repository.dart';
 
 class ClassRepository {
-  final ApiRepository _apiRepository = ApiRepository();
+  final ApiRepository _apiRepository;
+
+  ClassRepository(this._apiRepository);
 
   Future<List<ClassModel>> getClasses() async {
     final response = await _apiRepository.get('/classes');
     final List<dynamic> data = response['data']['classes'] as List? ?? [];
-    return data.map((e) => ClassModel.fromJson(e as Map<String, dynamic>)).toList();
+    return data
+        .map((e) => ClassModel.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<void> bookClass(String classId, String memberId) async {

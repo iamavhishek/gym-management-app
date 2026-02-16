@@ -2,7 +2,9 @@ import 'package:gym_core/models/trainer_model.dart';
 import 'package:gym_core/repositories/api_repository.dart';
 
 class TrainerRepository {
-  final ApiRepository _apiRepository = ApiRepository();
+  final ApiRepository _apiRepository;
+
+  TrainerRepository(this._apiRepository);
 
   Future<List<TrainerModel>> getTrainers({int page = 1, int limit = 20}) async {
     final response = await _apiRepository.get(

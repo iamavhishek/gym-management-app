@@ -1,26 +1,131 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-    
-        {
-            "name": "gym_management_app",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "gym_management_app (profile mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "gym_management_app (release mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Member (Dev)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "memberDev",
+        "--dart-define",
+        "APP_FLAVOR=member",
+        "--dart-define",
+        "APP_ENV=dev"
+      ]
+    },
+    {
+      "name": "Member (Staging)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "memberStaging",
+        "--dart-define",
+        "APP_FLAVOR=member",
+        "--dart-define",
+        "APP_ENV=staging"
+      ]
+    },
+    {
+      "name": "Member (Prod)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "memberProd",
+        "--dart-define",
+        "APP_FLAVOR=member",
+        "--dart-define",
+        "APP_ENV=prod"
+      ]
+    },
+    {
+      "name": "Admin (Dev)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "adminDev",
+        "--dart-define",
+        "APP_FLAVOR=admin",
+        "--dart-define",
+        "APP_ENV=dev"
+      ]
+    },
+    {
+      "name": "Admin (Staging)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "adminStaging",
+        "--dart-define",
+        "APP_FLAVOR=admin",
+        "--dart-define",
+        "APP_ENV=staging"
+      ]
+    },
+    {
+      "name": "Admin (Prod)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "adminProd",
+        "--dart-define",
+        "APP_FLAVOR=admin",
+        "--dart-define",
+        "APP_ENV=prod"
+      ]
+    },
+    {
+      "name": "Trainer (Dev)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "trainerDev",
+        "--dart-define",
+        "APP_FLAVOR=trainer",
+        "--dart-define",
+        "APP_ENV=dev"
+      ]
+    },
+    {
+      "name": "Trainer (Staging)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "trainerStaging",
+        "--dart-define",
+        "APP_FLAVOR=trainer",
+        "--dart-define",
+        "APP_ENV=staging"
+      ]
+    },
+    {
+      "name": "Trainer (Prod)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "trainerProd",
+        "--dart-define",
+        "APP_FLAVOR=trainer",
+        "--dart-define",
+        "APP_ENV=prod"
+      ]
+    }
+  ]
 }

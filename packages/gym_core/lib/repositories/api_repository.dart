@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:gym_core/config/constants.dart';
+import 'package:gym_core/utils/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiRepository {
-  static const String baseUrl = AppConstants.apiBaseUrl;
+  final String baseUrl;
+
+  ApiRepository({required this.baseUrl});
 
   Future<Map<String, String>> _getHeaders() async {
     final prefs = await SharedPreferences.getInstance();
@@ -23,7 +26,8 @@ class ApiRepository {
     try {
       final response = await http.get(uri, headers: headers);
       return _handleResponse(response);
-    } catch (e) {
+    } catch (e, stack) {
+      GymLogger.error('GET Request failed: $uri', error: e, stackTrace: stack);
       throw Exception('Network error: $e');
     }
   }
@@ -39,7 +43,8 @@ class ApiRepository {
         body: jsonEncode(body),
       );
       return _handleResponse(response);
-    } catch (e) {
+    } catch (e, stack) {
+      GymLogger.error('POST Request failed: $uri', error: e, stackTrace: stack);
       throw Exception('Network error: $e');
     }
   }
@@ -55,7 +60,8 @@ class ApiRepository {
         body: jsonEncode(body),
       );
       return _handleResponse(response);
-    } catch (e) {
+    } catch (e, stack) {
+      GymLogger.error('PUT Request failed: $uri', error: e, stackTrace: stack);
       throw Exception('Network error: $e');
     }
   }
@@ -67,7 +73,12 @@ class ApiRepository {
     try {
       final response = await http.delete(uri, headers: headers);
       return _handleResponse(response);
-    } catch (e) {
+    } catch (e, stack) {
+      GymLogger.error(
+        'DELETE Request failed: $uri',
+        error: e,
+        stackTrace: stack,
+      );
       throw Exception('Network error: $e');
     }
   }
@@ -81,9 +92,15 @@ class ApiRepository {
       try {
         body = jsonDecode(response.body) as Map<String, dynamic>;
       } catch (e) {
+        GymLogger.error(
+          'Server error: ${response.statusCode}',
+          error: response.body,
+        );
         throw Exception('Server error: ${response.statusCode}');
       }
-      throw Exception(body['message'] ?? 'Unknown error occurred');
+      final message = body['message'] ?? 'Unknown error occurred';
+      GymLogger.error('API Error (${response.statusCode}): $message');
+      throw Exception(message);
     }
   }
 }

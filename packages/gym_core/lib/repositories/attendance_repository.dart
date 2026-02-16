@@ -2,7 +2,9 @@ import 'package:gym_core/models/attendance_model.dart';
 import 'package:gym_core/repositories/api_repository.dart';
 
 class AttendanceRepository {
-  final ApiRepository _apiRepository = ApiRepository();
+  final ApiRepository _apiRepository;
+
+  AttendanceRepository(this._apiRepository);
 
   Future<List<AttendanceModel>> getAttendance(String memberId) async {
     final response = await _apiRepository.get('/members/$memberId/attendance');

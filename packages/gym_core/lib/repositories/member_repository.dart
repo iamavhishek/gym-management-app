@@ -2,7 +2,9 @@ import 'package:gym_core/models/member_model.dart';
 import 'package:gym_core/repositories/api_repository.dart';
 
 class MemberRepository {
-  final ApiRepository _apiRepository = ApiRepository();
+  final ApiRepository _apiRepository;
+
+  MemberRepository(this._apiRepository);
 
   Future<MemberModel> getProfile() async {
     final response = await _apiRepository.get('/members/profile');

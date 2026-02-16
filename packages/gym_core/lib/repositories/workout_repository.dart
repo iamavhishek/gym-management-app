@@ -2,7 +2,9 @@ import 'package:gym_core/models/workout_model.dart';
 import 'package:gym_core/repositories/api_repository.dart';
 
 class WorkoutRepository {
-  final ApiRepository _apiRepository = ApiRepository();
+  final ApiRepository _apiRepository;
+
+  WorkoutRepository(this._apiRepository);
 
   Future<List<WorkoutPlanModel>> getWorkoutPlans({
     String? memberId,

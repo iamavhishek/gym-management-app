@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gym_core/blocs/auth/auth_bloc.dart';
+import 'package:gym_core/config/environment.dart';
 import 'package:gym_core/config/flavor.dart';
+import 'package:gym_core/utils/logger.dart';
 import 'package:gym_ui/config/app_router.dart';
 import 'package:gym_ui/config/theme.dart';
 import 'package:gym_ui/widgets/gym_app_wrapper.dart';
@@ -16,7 +17,7 @@ void main() {
 
       FlutterError.onError = (FlutterErrorDetails details) {
         FlutterError.presentError(details);
-        developer.log(
+        GymLogger.error(
           'Flutter Error',
           error: details.exception,
           stackTrace: details.stack,
@@ -26,7 +27,7 @@ void main() {
       runApp(const GymUnifiedApp());
     },
     (error, stack) {
-      developer.log('Unhandled Error', error: error, stackTrace: stack);
+      GymLogger.error('Unhandled Error', error: error, stackTrace: stack);
     },
   );
 }
@@ -43,9 +44,14 @@ class _GymUnifiedAppState extends State<GymUnifiedApp> {
     const String.fromEnvironment('APP_FLAVOR'),
   );
 
+  final AppEnvironment _environment = AppEnvironment.fromString(
+    const String.fromEnvironment('APP_ENV'),
+  );
+
   @override
   Widget build(BuildContext context) {
     return GymAppWrapper(
+      environment: _environment,
       child: Builder(
         builder: (context) {
           return MaterialApp.router(

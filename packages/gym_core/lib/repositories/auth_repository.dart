@@ -6,7 +6,9 @@ import 'package:gym_core/repositories/api_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {
-  final ApiRepository _apiRepository = ApiRepository();
+  final ApiRepository _apiRepository;
+
+  AuthRepository(this._apiRepository);
 
   Future<UserModel> login(String email, String password) async {
     final response = await _apiRepository.post(

@@ -2,7 +2,9 @@ import 'package:gym_core/models/payment_model.dart';
 import 'package:gym_core/repositories/api_repository.dart';
 
 class PaymentRepository {
-  final ApiRepository _apiRepository = ApiRepository();
+  final ApiRepository _apiRepository;
+
+  PaymentRepository(this._apiRepository);
 
   Future<List<PaymentModel>> getPayments({int page = 1, int limit = 20}) async {
     final response = await _apiRepository.get(

@@ -2,7 +2,9 @@ import 'package:gym_core/models/notification_model.dart';
 import 'package:gym_core/repositories/api_repository.dart';
 
 class NotificationRepository {
-  final ApiRepository _apiRepository = ApiRepository();
+  final ApiRepository _apiRepository;
+
+  NotificationRepository(this._apiRepository);
 
   Future<List<NotificationModel>> getNotifications() async {
     final response = await _apiRepository.get('/notifications');
