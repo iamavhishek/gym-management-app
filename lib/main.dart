@@ -3,28 +3,11 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gym_management_app/blocs/attendance/attendance_bloc.dart';
-import 'package:gym_management_app/blocs/auth/auth_bloc.dart';
-import 'package:gym_management_app/blocs/auth/auth_event.dart';
-import 'package:gym_management_app/blocs/class/class_bloc.dart';
-import 'package:gym_management_app/blocs/member/member_bloc.dart';
-import 'package:gym_management_app/blocs/notification/notification_bloc.dart';
-import 'package:gym_management_app/blocs/payment/payment_bloc.dart';
-import 'package:gym_management_app/blocs/plans/plans_bloc.dart';
-import 'package:gym_management_app/blocs/stats/stats_bloc.dart';
-import 'package:gym_management_app/blocs/trainer/trainer_bloc.dart';
-import 'package:gym_management_app/blocs/workout/workout_bloc.dart';
-import 'package:gym_management_app/config/routes.dart';
-import 'package:gym_management_app/config/theme.dart';
-import 'package:gym_management_app/repositories/attendance_repository.dart';
-import 'package:gym_management_app/repositories/auth_repository.dart';
-import 'package:gym_management_app/repositories/class_repository.dart';
-import 'package:gym_management_app/repositories/member_repository.dart';
-import 'package:gym_management_app/repositories/notification_repository.dart';
-import 'package:gym_management_app/repositories/payment_repository.dart';
-import 'package:gym_management_app/repositories/report_repository.dart';
-import 'package:gym_management_app/repositories/trainer_repository.dart';
-import 'package:gym_management_app/repositories/workout_repository.dart';
+import 'package:gym_core/blocs/auth/auth_bloc.dart';
+import 'package:gym_core/config/flavor.dart';
+import 'package:gym_ui/config/app_router.dart';
+import 'package:gym_ui/config/theme.dart';
+import 'package:gym_ui/widgets/gym_app_wrapper.dart';
 
 void main() {
   runZonedGuarded(
@@ -40,7 +23,7 @@ void main() {
         );
       };
 
-      runApp(const MyApp());
+      runApp(const GymUnifiedApp());
     },
     (error, stack) {
       developer.log('Unhandled Error', error: error, stackTrace: stack);
@@ -48,71 +31,47 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class GymUnifiedApp extends StatefulWidget {
+  const GymUnifiedApp({super.key});
+
+  @override
+  State<GymUnifiedApp> createState() => _GymUnifiedAppState();
+}
+
+class _GymUnifiedAppState extends State<GymUnifiedApp> {
+  final AppFlavor _flavor = AppFlavor.fromString(
+    const String.fromEnvironment('APP_FLAVOR'),
+  );
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider(create: (context) => AuthRepository()),
-        RepositoryProvider(create: (context) => PaymentRepository()),
-        RepositoryProvider(create: (context) => ClassRepository()),
-        RepositoryProvider(create: (context) => TrainerRepository()),
-        RepositoryProvider(create: (context) => MemberRepository()),
-        RepositoryProvider(create: (context) => AttendanceRepository()),
-        RepositoryProvider(create: (context) => NotificationRepository()),
-        RepositoryProvider(create: (context) => WorkoutRepository()),
-        RepositoryProvider(create: (context) => ReportRepository()),
-      ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) =>
-                AuthBloc(context.read<AuthRepository>())
-                  ..add(const AuthEvent.started()),
-          ),
-          BlocProvider(
-            create: (context) => PlansBloc(context.read<PaymentRepository>()),
-          ),
-          BlocProvider(
-            create: (context) => ClassBloc(context.read<ClassRepository>()),
-          ),
-          BlocProvider(
-            create: (context) => MemberBloc(context.read<MemberRepository>()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                AttendanceBloc(context.read<AttendanceRepository>()),
-          ),
-          BlocProvider(
-            create: (context) => PaymentBloc(context.read<PaymentRepository>()),
-          ),
-          BlocProvider(
-            create: (context) => WorkoutBloc(context.read<WorkoutRepository>()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                NotificationBloc(context.read<NotificationRepository>()),
-          ),
-          BlocProvider(
-            create: (context) => TrainerBloc(context.read<TrainerRepository>()),
-          ),
-          BlocProvider(
-            create: (context) => StatsBloc(
-              context.read<ReportRepository>(),
-              context.read<PaymentRepository>(),
+    return GymAppWrapper(
+      child: Builder(
+        builder: (context) {
+          return MaterialApp.router(
+            title: _getAppTitle(),
+            theme: AppTheme.lightTheme,
+            routerConfig: AppRouter.createRouter(
+              context.read<AuthBloc>(),
+              flavor: _flavor,
             ),
-          ),
-        ],
-        child: MaterialApp(
-          title: 'Gym Management App',
-          theme: AppTheme.lightTheme,
-          initialRoute: AppRoutes.splash,
-          onGenerateRoute: AppRoutes.generateRoute,
-          debugShowCheckedModeBanner: false,
-        ),
+            debugShowCheckedModeBanner: false,
+          );
+        },
       ),
     );
+  }
+
+  String _getAppTitle() {
+    switch (_flavor) {
+      case AppFlavor.admin:
+        return 'Gym Admin';
+      case AppFlavor.trainer:
+        return 'Gym Trainer';
+      case AppFlavor.member:
+        return 'Gym Member';
+      default:
+        return 'Gym Management System';
+    }
   }
 }

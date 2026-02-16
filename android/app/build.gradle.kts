@@ -30,6 +30,26 @@ android {
         versionName = flutter.versionName
     }
 
+    flavorDimensions += "app"
+
+    productFlavors {
+        create("admin") {
+            dimension = "app"
+            applicationId = "com.gym.admin"
+            manifestPlaceholders["appName"] = "Gym Admin"
+        }
+        create("trainer") {
+            dimension = "app"
+            applicationId = "com.gym.trainer"
+            manifestPlaceholders["appName"] = "Gym Trainer"
+        }
+        create("member") {
+            dimension = "app"
+            applicationId = "com.gym.member"
+            manifestPlaceholders["appName"] = "Gym Member"
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
