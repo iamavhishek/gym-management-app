@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_management_app/core/blocs/attendance/attendance_bloc.dart';
 import 'package:gym_management_app/core/blocs/attendance/attendance_event.dart';
 import 'package:gym_management_app/core/blocs/attendance/attendance_state.dart';
 import 'package:gym_management_app/core/models/attendance_model.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AttendanceScreen extends StatefulWidget {
@@ -46,7 +48,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Error: ${state.message}'),
-                backgroundColor: Colors.red,
+                backgroundColor: const Color(0xFFEF4444),
               ),
             );
           }
@@ -77,7 +79,15 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         _buildSummaryCard(attendance),
         Expanded(
           child: attendance.isEmpty
-              ? const Center(child: Text('No attendance records'))
+              ? Center(
+                  child: Text(
+                    'No attendance records',
+                    style: GoogleFonts.inter(
+                      color: AppTheme.textSecondary,
+                      fontSize: 14,
+                    ),
+                  ),
+                )
               : _buildAttendanceList(attendance),
         ),
       ],
@@ -99,18 +109,19 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   ? 1
                   : attendance.where((a) => a.duration != null).length);
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.all(16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildStatColumn('This Month', '$thisMonth', 'visits'),
-            _buildStatColumn('Avg Duration', '$avgDuration', 'mins'),
-            _buildStatColumn('Total', '${attendance.length}', 'all time'),
-          ],
-        ),
+      padding: const EdgeInsets.all(20),
+      decoration: AppTheme.premiumDecoration(),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildStatColumn('This Month', '$thisMonth', 'visits'),
+          Container(width: 1, height: 40, color: AppTheme.outlineLight),
+          _buildStatColumn('Avg Duration', '$avgDuration', 'mins'),
+          Container(width: 1, height: 40, color: AppTheme.outlineLight),
+          _buildStatColumn('Total', '${attendance.length}', 'all time'),
+        ],
       ),
     );
   }
@@ -118,20 +129,34 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   Widget _buildStatColumn(String title, String value, String subtitle) {
     return Column(
       children: [
-        Text(title, style: Theme.of(context).textTheme.bodySmall),
+        Text(
+          title,
+          style: GoogleFonts.inter(
+            fontSize: 11,
+            color: AppTheme.textSecondary,
+          ),
+        ),
+        const SizedBox(height: 4),
         Text(
           value,
-          style: Theme.of(
-            context,
-          ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+          style: GoogleFonts.outfit(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: AppTheme.primaryDark,
+          ),
         ),
-        Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+        Text(
+          subtitle,
+          style: GoogleFonts.inter(
+            fontSize: 11,
+            color: AppTheme.textSecondary,
+          ),
+        ),
       ],
     );
   }
 
   Widget _buildAttendanceList(List<AttendanceModel> attendance) {
-    // Group by date
     final grouped = <String, List<AttendanceModel>>{};
     for (final a in attendance) {
       final key =
@@ -151,7 +176,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text(date, style: Theme.of(context).textTheme.titleMedium),
+              child: Text(
+                date,
+                style: GoogleFonts.outfit(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  color: AppTheme.textMain,
+                ),
+              ),
             ),
             ...records.map((record) => _buildAttendanceCard(record)),
           ],
@@ -167,31 +199,70 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         ? '${record.checkOutTime!.hour.toString().padLeft(2, '0')}:${record.checkOutTime!.minute.toString().padLeft(2, '0')}'
         : 'In Progress';
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 8),
-      child: ListTile(
-        leading: Icon(
-          record.method == 'QR' ? Icons.qr_code : Icons.touch_app,
-          color: Colors.blue,
-        ),
-        title: Text('$checkIn - $checkOut'),
-        subtitle: Text('Duration: ${record.duration ?? 'In Progress'} mins'),
-        trailing: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: record.status == 'present'
-                ? Colors.green.withValues(alpha: 0.2)
-                : Colors.orange.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Text(
-            record.status.toUpperCase(),
-            style: TextStyle(
-              color: record.status == 'present' ? Colors.green : Colors.orange,
-              fontSize: 12,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: AppTheme.premiumDecoration(),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: const Color(0xFF10B981).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(
+              record.method == 'QR'
+                  ? Icons.qr_code_rounded
+                  : Icons.touch_app_rounded,
+              color: const Color(0xFF10B981),
+              size: 22,
             ),
           ),
-        ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$checkIn - $checkOut',
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    color: AppTheme.textMain,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Duration: ${record.duration ?? 'In Progress'} mins',
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    color: AppTheme.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: record.status == 'present'
+                  ? const Color(0xFF10B981).withOpacity(0.1)
+                  : const Color(0xFFF59E0B).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              record.status.toUpperCase(),
+              style: GoogleFonts.inter(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: record.status == 'present'
+                    ? const Color(0xFF10B981)
+                    : const Color(0xFFF59E0B),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,9 +1,4 @@
 class AppConstants {
-  // API Configuration
-  static const String apiBaseUrl = 'http://localhost:3000/api';
-  // Use 'http://10.0.2.2:3000/api' for Android Emulator
-  // Use your machine's IP for physical device testing
-
   // Currency (Nepali Rupee)
   static const String currencySymbol = 'रु';
 

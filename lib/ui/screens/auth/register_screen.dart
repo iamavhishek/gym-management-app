@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gym_management_app/core/blocs/auth/auth_bloc.dart';
 import 'package:gym_management_app/core/blocs/auth/auth_event.dart';
 import 'package:gym_management_app/core/blocs/auth/auth_state.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -44,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.error!),
-                backgroundColor: Colors.red,
+                backgroundColor: const Color(0xFFEF4444),
               ),
             );
           }
@@ -64,7 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const Icon(
                     Icons.fitness_center,
                     size: 80,
-                    color: Colors.blue,
+                    color: AppTheme.primaryBlue,
                   ),
                   const SizedBox(height: 20),
                   Text(

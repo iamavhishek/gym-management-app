@@ -16,7 +16,7 @@ enum AppEnvironment {
       case AppEnvironment.dev:
         return 'http://localhost:3000/api';
       case AppEnvironment.staging:
-        return 'http://localhost:3000/api';
+        return 'https://gym-api.asraf-ansari.com.np/api';
       case AppEnvironment.prod:
         return 'http://localhost:3000/api';
     }

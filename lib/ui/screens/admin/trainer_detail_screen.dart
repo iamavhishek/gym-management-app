@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_management_app/core/blocs/trainer/trainer_bloc.dart';
 import 'package:gym_management_app/core/blocs/trainer/trainer_event.dart';
 import 'package:gym_management_app/core/blocs/trainer/trainer_state.dart';
 import 'package:gym_management_app/core/config/routes.dart';
 import 'package:gym_management_app/core/models/trainer_model.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 
 class TrainerDetailScreen extends StatefulWidget {
   final String trainerId;
@@ -98,25 +100,36 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
         children: [
           CircleAvatar(
             radius: 50,
-            backgroundColor: Colors.blue.shade100,
+            backgroundColor: AppTheme.primaryBlue.withOpacity(0.1),
             backgroundImage: trainer.profileImage != null
                 ? NetworkImage(trainer.profileImage!)
                 : null,
             child: trainer.profileImage == null
                 ? Text(
                     trainer.firstName[0],
-                    style: const TextStyle(fontSize: 40, color: Colors.blue),
+                    style: GoogleFonts.outfit(
+                      fontSize: 40,
+                      color: AppTheme.primaryBlue,
+                      fontWeight: FontWeight.bold,
+                    ),
                   )
                 : null,
           ),
           const SizedBox(height: 16),
           Text(
             '${trainer.firstName} ${trainer.lastName}',
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: GoogleFonts.outfit(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.primaryDark,
+            ),
           ),
           Text(
             trainer.specialization,
-            style: const TextStyle(color: Colors.grey, fontSize: 16),
+            style: GoogleFonts.inter(
+              color: AppTheme.textSecondary,
+              fontSize: 16,
+            ),
           ),
         ],
       ),
@@ -128,10 +141,10 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
       padding: const EdgeInsets.only(bottom: 12),
       child: Text(
         title,
-        style: const TextStyle(
+        style: GoogleFonts.outfit(
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: Colors.blue,
+          color: AppTheme.primaryBlue,
         ),
       ),
     );
@@ -147,16 +160,16 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
             width: 120,
             child: Text(
               label,
-              style: const TextStyle(
+              style: GoogleFonts.inter(
                 fontWeight: FontWeight.w500,
-                color: Colors.grey,
+                color: AppTheme.textSecondary,
               ),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(fontWeight: FontWeight.w500),
+              style: GoogleFonts.inter(fontWeight: FontWeight.w500),
             ),
           ),
         ],

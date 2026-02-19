@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_management_app/core/blocs/member/member_bloc.dart';
 import 'package:gym_management_app/core/blocs/member/member_event.dart';
 import 'package:gym_management_app/core/blocs/member/member_state.dart';
@@ -37,15 +38,15 @@ class _MemberDashboardState extends State<MemberDashboard> {
       },
       body: BlocBuilder<MemberBloc, MemberState>(
         builder: (context, state) {
-          if (state is MemberLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is MemberProfileLoaded) {
-            return _buildBody(state.profile);
-          } else if (state is MemberError) {
-            return Center(child: Text('Error: ${state.message}'));
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
+          return state.maybeWhen(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            profileLoaded: (profile) => _buildBody(profile),
+            updateSuccess: (message, profile) => profile != null
+                ? _buildBody(profile)
+                : const Center(child: CircularProgressIndicator()),
+            error: (message) => Center(child: Text('Error: $message')),
+            orElse: () => const Center(child: CircularProgressIndicator()),
+          );
         },
       ),
     );
@@ -80,13 +81,11 @@ class _MemberDashboardState extends State<MemberDashboard> {
           children: [
             Text(
               'Hello, ${profile.user?.firstName ?? 'Athlete'}!',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: const Color(0xFF0F172A),
-              ),
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
             Text(
               'Ready for your workout today?',
-              style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),
@@ -121,12 +120,12 @@ class _MemberDashboardState extends State<MemberDashboard> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: AppTheme.primaryGradiant,
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryBlue.withOpacity(0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: AppTheme.primaryBlue.withOpacity(0.25),
+            blurRadius: 24,
+            offset: const Offset(0, 12),
           ),
         ],
       ),
@@ -220,7 +219,7 @@ class _MemberDashboardState extends State<MemberDashboard> {
             label: 'Attendance',
             value: '${profile.attendanceRate ?? 85}%',
             icon: Icons.calendar_month_rounded,
-            color: Colors.orange,
+            color: const Color(0xFFF59E0B),
             gradient: AppTheme.warningGradiant,
           ),
         ),
@@ -230,7 +229,7 @@ class _MemberDashboardState extends State<MemberDashboard> {
             label: 'Goal',
             value: profile.goals ?? 'Fat Loss',
             icon: Icons.track_changes_rounded,
-            color: Colors.purple,
+            color: AppTheme.primaryBlue,
             gradient: AppTheme.accentGradiant,
           ),
         ),
@@ -240,29 +239,28 @@ class _MemberDashboardState extends State<MemberDashboard> {
 
   Widget _buildActivitySection() {
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: Colors.grey.shade100),
-      ),
+      padding: const EdgeInsets.all(24),
+      decoration: AppTheme.premiumDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Weekly Activity',
-                style: TextStyle(
-                  fontSize: 16,
+                style: GoogleFonts.outfit(
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1E293B),
+                  color: AppTheme.textMain,
                 ),
               ),
               Text(
                 'Last 7 days',
-                style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
+                style: GoogleFonts.inter(
+                  color: AppTheme.textSecondary,
+                  fontSize: 12,
+                ),
               ),
             ],
           ),
@@ -309,9 +307,9 @@ class _MemberDashboardState extends State<MemberDashboard> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppTheme.surfaceLight,
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.grey.shade100),
+              border: Border.all(color: AppTheme.outlineLight),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.02),
@@ -320,15 +318,15 @@ class _MemberDashboardState extends State<MemberDashboard> {
                 ),
               ],
             ),
-            child: Icon(icon, color: const Color(0xFF1E293B), size: 24),
+            child: Icon(icon, color: AppTheme.textMain, size: 24),
           ),
           const SizedBox(height: 8),
           Text(
             label,
-            style: TextStyle(
+            style: GoogleFonts.inter(
               fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.textSecondary,
             ),
           ),
         ],

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:gym_management_app/core/blocs/auth/auth_bloc.dart';
 import 'package:gym_management_app/core/blocs/auth/auth_state.dart';
 import 'package:gym_management_app/core/config/routes.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -26,7 +27,7 @@ class SplashScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.fitness_center, size: 80, color: Colors.blue),
+              Icon(Icons.fitness_center, size: 80, color: AppTheme.primaryBlue),
               SizedBox(height: 24),
               CircularProgressIndicator(),
             ],

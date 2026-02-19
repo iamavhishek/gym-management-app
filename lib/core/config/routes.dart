@@ -10,9 +10,12 @@ class AppRoutes {
   static const String adminTrainers = '/admin/trainers';
   static const String adminTrainersAdd = '/admin/trainers/add';
   static const String adminPayments = '/admin/payments';
+  static const String adminPaymentsRecord = '/admin/payments/record';
   static const String adminReports = '/admin/reports';
 
   static const String adminPlans = '/admin/plans';
+  static const String adminMembersEditMembership =
+      '/admin/members/membership/edit';
 
   // Member routes
   static const String memberDashboard = '/member/dashboard';

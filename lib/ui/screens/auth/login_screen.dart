@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_management_app/core/blocs/auth/auth_bloc.dart';
 import 'package:gym_management_app/core/blocs/auth/auth_event.dart';
 import 'package:gym_management_app/core/blocs/auth/auth_state.dart';
 import 'package:gym_management_app/core/config/routes.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -44,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.error!),
-                backgroundColor: Colors.red,
+                backgroundColor: const Color(0xFFEF4444),
               ),
             );
           }
@@ -67,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const Icon(
                     Icons.fitness_center,
                     size: 80,
-                    color: Colors.blue,
+                    color: AppTheme.primaryBlue,
                   ),
                   const SizedBox(height: 20),
                   Text(
@@ -80,9 +82,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 8),
                   Text(
                     'Login to your account',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyLarge?.copyWith(color: Colors.grey),
+                    style: GoogleFonts.inter(
+                      color: AppTheme.textSecondary,
+                      fontSize: 16,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 40),

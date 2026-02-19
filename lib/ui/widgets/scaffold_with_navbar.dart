@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 
 class ScaffoldWithNavBar extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -17,11 +18,17 @@ class ScaffoldWithNavBar extends StatelessWidget {
       body: navigationShell,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            top: BorderSide(
+              color: AppTheme.outlineLight.withOpacity(0.5),
+            ),
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: AppTheme.primaryDark.withOpacity(0.02),
               blurRadius: 20,
-              offset: const Offset(0, -5),
+              offset: const Offset(0, -4),
             ),
           ],
         ),
@@ -29,6 +36,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
           selectedIndex: navigationShell.currentIndex,
           backgroundColor: Colors.white,
           elevation: 0,
+          height: 70,
           onDestinationSelected: (index) => _onItemTapped(context, index),
           destinations: destinations,
         ),

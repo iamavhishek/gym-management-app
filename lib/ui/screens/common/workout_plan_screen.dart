@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_management_app/core/blocs/workout/workout_bloc.dart';
 import 'package:gym_management_app/core/blocs/workout/workout_event.dart';
 import 'package:gym_management_app/core/blocs/workout/workout_state.dart';
 import 'package:gym_management_app/core/config/routes.dart';
 import 'package:gym_management_app/core/models/workout_model.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WorkoutPlanScreen extends StatefulWidget {
@@ -91,7 +93,7 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Error: ${state.message}'),
-                backgroundColor: Colors.red,
+                backgroundColor: const Color(0xFFEF4444),
               ),
             );
           }
@@ -164,7 +166,10 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
             Expanded(
               child: Text(
                 plan.name,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.textMain,
+                ),
               ),
             ),
             if (_userRole == 'trainer') ...[
@@ -213,13 +218,17 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
             width: 80,
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.blue.shade100,
-              borderRadius: BorderRadius.circular(4),
+              color: AppTheme.primaryBlue.withOpacity(0.08),
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
               dayName,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12),
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.primaryBlue,
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -229,11 +238,17 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
               children: [
                 Text(
                   session.exercise?.name ?? 'Unknown Exercise',
-                  style: const TextStyle(fontWeight: FontWeight.w500),
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w500,
+                    color: AppTheme.textMain,
+                  ),
                 ),
                 Text(
                   '${session.sets} sets x ${session.reps} reps',
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    color: AppTheme.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -316,7 +331,7 @@ class _WorkoutPlanScreenState extends State<WorkoutPlanScreen> {
             },
             child: const Text(
               'Delete',
-              style: TextStyle(color: Colors.red),
+              style: TextStyle(color: Color(0xFFEF4444)),
             ),
           ),
         ],

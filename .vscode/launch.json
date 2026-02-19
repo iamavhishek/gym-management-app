@@ -129,3 +129,8 @@
     }
   ]
 }
+// super-admin
+// will send email to endpoint will get otp
+// andi will fill the otp and if its valid will be logged in 
+// endpoint -> request-otp {"channel":"email","identifier":"email"}
+// otp submission /login body{"identifier":"email@email.com","otp":"otp"}

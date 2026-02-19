@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_management_app/core/blocs/attendance/attendance_bloc.dart';
 import 'package:gym_management_app/core/blocs/attendance/attendance_event.dart';
 import 'package:gym_management_app/core/blocs/attendance/attendance_state.dart';
@@ -82,9 +83,9 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                     color: Colors.black54,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Scan member QR code',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
                   ),
                 ),
               ),
@@ -94,15 +95,15 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                 if (state is AttendanceLoading) {
                   return Container(
                     color: Colors.black54,
-                    child: const Center(
+                    child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CircularProgressIndicator(color: Colors.white),
-                          SizedBox(height: 16),
+                          const CircularProgressIndicator(color: Colors.white),
+                          const SizedBox(height: 16),
                           Text(
                             'Processing...',
-                            style: TextStyle(color: Colors.white),
+                            style: GoogleFonts.inter(color: Colors.white),
                           ),
                         ],
                       ),
@@ -139,7 +140,11 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        icon: const Icon(Icons.check_circle, color: Colors.green, size: 64),
+        icon: const Icon(
+          Icons.check_circle_rounded,
+          color: Color(0xFF10B981),
+          size: 64,
+        ),
         title: const Text('Success!'),
         content: Text(message),
         actions: [
@@ -163,7 +168,11 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        icon: const Icon(Icons.error, color: Colors.red, size: 64),
+        icon: const Icon(
+          Icons.error_outline_rounded,
+          color: Color(0xFFEF4444),
+          size: 64,
+        ),
         title: const Text('Check-in Failed'),
         content: Text(error),
         actions: [

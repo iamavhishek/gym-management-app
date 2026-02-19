@@ -3,10 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gym_management_app/core/blocs/member/member_bloc.dart';
 import 'package:gym_management_app/core/blocs/member/member_event.dart';
 import 'package:gym_management_app/core/blocs/member/member_state.dart';
-import 'package:gym_management_app/core/blocs/plans/plans_bloc.dart';
-import 'package:gym_management_app/core/blocs/plans/plans_event.dart';
-import 'package:gym_management_app/core/blocs/plans/plans_state.dart';
-import 'package:gym_management_app/core/models/payment_model.dart';
 
 class AddMemberScreen extends StatefulWidget {
   final String? memberId;
@@ -24,12 +20,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _phoneController = TextEditingController();
-  String? _selectedPlanId;
 
   @override
   void initState() {
     super.initState();
-    context.read<PlansBloc>().add(const PlansEvent.started());
     if (widget.memberId != null) {
       context.read<MemberBloc>().add(
         MemberEvent.fetchMemberDetails(widget.memberId!),
@@ -63,9 +57,6 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 _lastNameController.text = member.user?.lastName ?? '';
                 _emailController.text = member.user?.email ?? '';
                 _phoneController.text = member.user?.phone ?? '';
-                if (member.planId != null) {
-                  setState(() => _selectedPlanId = member.planId);
-                }
               } else if (state is MemberUpdateSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.message)),
@@ -75,42 +66,19 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Error: ${state.message}'),
-                    backgroundColor: Colors.red,
+                    backgroundColor: const Color(0xFFEF4444),
                   ),
                 );
               }
             },
           ),
-          BlocListener<PlansBloc, PlansState>(
-            listener: (context, state) {
-              if (state is PlansLoaded &&
-                  state.plans.isNotEmpty &&
-                  _selectedPlanId == null) {
-                setState(() => _selectedPlanId = state.plans.first.id);
-              }
-            },
-          ),
         ],
-        child: BlocBuilder<PlansBloc, PlansState>(
-          builder: (context, state) {
-            if (state is PlansLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is PlansLoaded) {
-              return _buildForm(state.plans);
-            } else if (state is PlansError) {
-              return Center(
-                child: Text('Error loading plans: ${state.message}'),
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
-        ),
+        child: _buildForm(),
       ),
     );
   }
 
-  Widget _buildForm(List<MembershipPlanModel> plans) {
+  Widget _buildForm() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Form(
@@ -187,34 +155,6 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 },
               ),
             ],
-            if (widget.memberId == null) ...[
-              const SizedBox(height: 24),
-              Text(
-                'Membership Plan',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 16),
-              if (plans.isEmpty)
-                const Text('No plans available. Create a plan first.')
-              else
-                DropdownButtonFormField<String>(
-                  initialValue: _selectedPlanId,
-                  decoration: const InputDecoration(
-                    labelText: 'Select Plan',
-                    prefixIcon: Icon(Icons.card_membership),
-                  ),
-                  items: plans.map((plan) {
-                    return DropdownMenuItem<String>(
-                      value: plan.id,
-                      child: Text(
-                        '${plan.name} - रु ${plan.price} (${plan.duration} days)',
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) => setState(() => _selectedPlanId = value),
-                  validator: (v) => v == null ? 'Select a plan' : null,
-                ),
-            ],
             const SizedBox(height: 32),
             BlocBuilder<MemberBloc, MemberState>(
               builder: (context, memberState) {
@@ -247,7 +187,6 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
 
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
-    if (widget.memberId == null && _selectedPlanId == null) return;
 
     if (widget.memberId != null) {
       // For update, password is optional (handled by backend or UI logic)
@@ -255,7 +194,6 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         'firstName': _firstNameController.text.trim(),
         'lastName': _lastNameController.text.trim(),
         'phone': _phoneController.text.trim(),
-        // Add other update fields as needed
       };
       context.read<MemberBloc>().add(
         MemberEvent.updateMember(widget.memberId!, updateData),
@@ -267,7 +205,6 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         'firstName': _firstNameController.text.trim(),
         'lastName': _lastNameController.text.trim(),
         'phone': _phoneController.text.trim(),
-        'planId': _selectedPlanId,
       };
 
       context.read<MemberBloc>().add(MemberEvent.createMember(data));

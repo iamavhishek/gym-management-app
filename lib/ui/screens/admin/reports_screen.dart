@@ -1,9 +1,11 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_management_app/core/blocs/stats/stats_bloc.dart';
 import 'package:gym_management_app/core/blocs/stats/stats_event.dart';
 import 'package:gym_management_app/core/blocs/stats/stats_state.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
@@ -82,39 +84,44 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
   Widget _buildRevenueCard(Map<String, dynamic> report) {
     final summary = report['totalSummary'] ?? {};
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Revenue Summary',
-              style: Theme.of(context).textTheme.titleLarge,
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: AppTheme.premiumDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Revenue Summary',
+            style: GoogleFonts.outfit(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.primaryDark,
             ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildStat(
-                  'Total Revenue',
-                  'रु ${summary['totalRevenue'] ?? 0}',
-                  Colors.green,
-                ),
-                _buildStat(
-                  'Pending',
-                  'रु ${summary['pendingRevenue'] ?? 0}',
-                  Colors.orange,
-                ),
-                _buildStat(
-                  'Refunds',
-                  'रु ${summary['refundAmount'] ?? 0}',
-                  Colors.red,
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildStat(
+                'Total Revenue',
+                'रु ${summary['totalRevenue'] ?? 0}',
+                const Color(0xFF10B981),
+              ),
+              Container(width: 1, height: 40, color: AppTheme.outlineLight),
+              _buildStat(
+                'Pending',
+                'रु ${summary['pendingRevenue'] ?? 0}',
+                const Color(0xFFF59E0B),
+              ),
+              Container(width: 1, height: 40, color: AppTheme.outlineLight),
+              _buildStat(
+                'Refunds',
+                'रु ${summary['refundAmount'] ?? 0}',
+                const Color(0xFFEF4444),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -125,14 +132,21 @@ class _ReportsScreenState extends State<ReportsScreen> {
         FittedBox(
           child: Text(
             value,
-            style: TextStyle(
+            style: GoogleFonts.outfit(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: color,
             ),
           ),
         ),
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: GoogleFonts.inter(
+            fontSize: 12,
+            color: AppTheme.textSecondary,
+          ),
+        ),
       ],
     );
   }
@@ -141,49 +155,68 @@ class _ReportsScreenState extends State<ReportsScreen> {
     final monthlyRevenue = (report['monthlyRevenue'] as List?) ?? [];
 
     if (monthlyRevenue.isEmpty) {
-      return const Card(
-        child: Padding(
-          padding: EdgeInsets.all(32),
-          child: Center(child: Text('No revenue data available')),
+      return Container(
+        padding: const EdgeInsets.all(32),
+        decoration: AppTheme.premiumDecoration(),
+        child: Center(
+          child: Text(
+            'No revenue data available',
+            style: GoogleFonts.inter(
+              color: AppTheme.textSecondary,
+              fontSize: 14,
+            ),
+          ),
         ),
       );
     }
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Revenue Trend',
-              style: Theme.of(context).textTheme.titleLarge,
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: AppTheme.premiumDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Revenue Trend',
+            style: GoogleFonts.outfit(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.primaryDark,
             ),
-            const SizedBox(height: 16),
-            SizedBox(
-              height: 200,
-              child: BarChart(
-                BarChartData(
-                  barGroups: monthlyRevenue.asMap().entries.map((entry) {
-                    final revenue =
-                        double.tryParse(
-                          entry.value['revenue']?.toString() ?? '0',
-                        ) ??
-                        0;
-                    return BarChartGroupData(
-                      x: entry.key,
-                      barRods: [
-                        BarChartRodData(toY: revenue, color: Colors.blue),
-                      ],
-                    );
-                  }).toList(),
-                  titlesData: const FlTitlesData(show: false),
-                  borderData: FlBorderData(show: false),
-                ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 200,
+            child: BarChart(
+              BarChartData(
+                barGroups: monthlyRevenue.asMap().entries.map((entry) {
+                  final revenue =
+                      double.tryParse(
+                        entry.value['revenue']?.toString() ?? '0',
+                      ) ??
+                      0;
+                  return BarChartGroupData(
+                    x: entry.key,
+                    barRods: [
+                      BarChartRodData(
+                        toY: revenue,
+                        color: AppTheme.primaryBlue,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(6),
+                          topRight: Radius.circular(6),
+                        ),
+                        width: 16,
+                      ),
+                    ],
+                  );
+                }).toList(),
+                titlesData: const FlTitlesData(show: false),
+                borderData: FlBorderData(show: false),
+                gridData: const FlGridData(show: false),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -191,28 +224,65 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Widget _buildMembershipBreakdown(Map<String, dynamic> report) {
     final breakdown = (report['revenueByPlan'] as List?) ?? [];
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Revenue by Plan',
-              style: Theme.of(context).textTheme.titleLarge,
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: AppTheme.premiumDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Revenue by Plan',
+            style: GoogleFonts.outfit(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.primaryDark,
             ),
-            const SizedBox(height: 16),
-            if (breakdown.isEmpty)
-              const Text('No data available')
-            else
-              ...breakdown.map(
-                (plan) => ListTile(
-                  title: Text((plan['plan_name'] as String?) ?? 'Unknown'),
-                  trailing: Text('रु ${plan['total_revenue'] ?? 0}'),
+          ),
+          const SizedBox(height: 16),
+          if (breakdown.isEmpty)
+            Text(
+              'No data available',
+              style: GoogleFonts.inter(
+                color: AppTheme.textSecondary,
+                fontSize: 14,
+              ),
+            )
+          else
+            ...breakdown.map(
+              (plan) => Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: AppTheme.surfaceLight,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      (plan['plan_name'] as String?) ?? 'Unknown',
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: AppTheme.textMain,
+                      ),
+                    ),
+                    Text(
+                      'रु ${plan['total_revenue'] ?? 0}',
+                      style: GoogleFonts.outfit(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: AppTheme.primaryBlue,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }

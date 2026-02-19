@@ -37,35 +37,34 @@ class _AdminDashboardState extends State<AdminDashboard> {
       },
       body: BlocBuilder<StatsBloc, StatsState>(
         builder: (context, state) {
-          if (state is StatsLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is StatsDashboardLoaded) {
-            final stats = state.stats;
-            return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildHeader(),
-                  const SizedBox(height: 20),
-                  _buildStatsGrid(stats),
-                  const SizedBox(height: 24),
-                  _buildChartsSection(),
-                  const SizedBox(height: 24),
-                  if (!((stats['hasPlans'] as bool?) ?? true))
-                    _buildNoPlansWarning(),
-                  const SizedBox(height: 12),
-                  _buildQuickActions(),
-                  const SizedBox(height: 24),
-                ],
-              ),
-            );
-          } else if (state is StatsError) {
-            return Center(child: Text('Error: ${state.message}'));
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
+          return state.maybeWhen(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            dashboardLoaded: (stats) => _buildBody(stats),
+            error: (message) => Center(child: Text('Error: $message')),
+            orElse: () => const Center(child: CircularProgressIndicator()),
+          );
         },
+      ),
+    );
+  }
+
+  Widget _buildBody(Map<String, dynamic> stats) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(),
+          const SizedBox(height: 20),
+          _buildStatsGrid(stats),
+          const SizedBox(height: 24),
+          _buildChartsSection(),
+          const SizedBox(height: 24),
+          if (!((stats['hasPlans'] as bool?) ?? true)) _buildNoPlansWarning(),
+          const SizedBox(height: 12),
+          _buildQuickActions(),
+          const SizedBox(height: 24),
+        ],
       ),
     );
   }
@@ -76,15 +75,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
       children: [
         Text(
           'Overview',
-          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-            color: const Color(0xFF0F172A),
-          ),
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
         Text(
           'Manage your gym performance at a glance',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Colors.grey.shade500,
-          ),
+          style: Theme.of(context).textTheme.bodySmall,
         ),
       ],
     );
@@ -102,16 +97,16 @@ class _AdminDashboardState extends State<AdminDashboard> {
           children: [
             GymStatCard(
               label: 'Total Members',
-              value: '${stats['totalMembers'] ?? 1240}', // Dummy fallback
+              value: '${stats['totalMembers'] ?? 1240}',
               icon: Icons.people_rounded,
-              color: Colors.blue.shade600,
+              color: AppTheme.primaryBlue,
               gradient: AppTheme.primaryGradiant,
             ),
             GymStatCard(
               label: 'Gym Traffic',
               value: '${stats['todayAttendance'] ?? 42}',
               icon: Icons.flash_on_rounded,
-              color: Colors.purple.shade600,
+              color: AppTheme.secondaryTeal,
               gradient: AppTheme.accentGradiant,
             ),
             GymStatCard(
@@ -125,7 +120,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               label: 'Pending',
               value: '${stats['pendingDues'] ?? 8}',
               icon: Icons.error_outline_rounded,
-              color: Colors.orange.shade600,
+              color: const Color(0xFFF59E0B),
               gradient: AppTheme.warningGradiant,
             ),
           ],
@@ -135,55 +130,73 @@ class _AdminDashboardState extends State<AdminDashboard> {
   }
 
   Widget _buildChartsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _sectionHeader('Analytics'),
-        const SizedBox(height: 16),
-        Row(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < 650;
+
+        if (isMobile) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _sectionHeader('Analytics'),
+              const SizedBox(height: 16),
+              _chartCard('Revenue Growth', const RevenueChart()),
+              const SizedBox(height: 16),
+              _chartCard('Plan Distribution', const MembershipPieChart()),
+            ],
+          );
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 2,
-              child: _chartCard('Revenue Growth', const RevenueChart()),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: _chartCard('Plans', const MembershipPieChart()),
+            _sectionHeader('Analytics'),
+            const SizedBox(height: 16),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: _chartCard('Revenue Growth', const RevenueChart()),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  flex: 2,
+                  child: _chartCard(
+                    'Plan Distribution',
+                    const MembershipPieChart(),
+                  ),
+                ),
+              ],
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 
   Widget _sectionHeader(String title) {
     return Text(
       title,
-      style: const TextStyle(
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(
         fontSize: 18,
-        fontWeight: FontWeight.bold,
-        color: Color(0xFF1E293B),
+        letterSpacing: -0.5,
       ),
     );
   }
 
   Widget _chartCard(String title, Widget chart) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade100),
-      ),
+      padding: const EdgeInsets.all(24),
+      decoration: AppTheme.premiumDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 14,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
               fontWeight: FontWeight.bold,
-              color: Color(0xFF64748B),
+              letterSpacing: 0.5,
             ),
           ),
           const SizedBox(height: 16),
@@ -210,25 +223,25 @@ class _AdminDashboardState extends State<AdminDashboard> {
             _actionButton(
               'Record Payment',
               Icons.add_card_rounded,
-              Colors.blue,
+              AppTheme.primaryBlue,
               () => context.push(AppRoutes.adminPayments),
             ),
             _actionButton(
               'New Member',
               Icons.person_add_rounded,
-              Colors.purple,
+              AppTheme.secondaryTeal,
               () => context.push(AppRoutes.adminMembersAdd),
             ),
             _actionButton(
               'Attendance Scan',
               Icons.qr_code_scanner_rounded,
-              Colors.orange,
+              const Color(0xFFF59E0B),
               () => context.push(AppRoutes.qrScanner),
             ),
             _actionButton(
               'Membership Plans',
               Icons.assignment_rounded,
-              Colors.green,
+              const Color(0xFF10B981),
               () => context.push(AppRoutes.adminPlans),
             ),
           ],
@@ -274,16 +287,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
   }
 
   Widget _buildNoPlansWarning() {
+    const warningRed = Color(0xFFEF4444);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.red.withOpacity(0.05),
+        color: warningRed.withOpacity(0.05),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.red.withOpacity(0.1)),
+        border: Border.all(color: warningRed.withOpacity(0.1)),
       ),
       child: Row(
         children: [
-          const Icon(Icons.warning_amber_rounded, color: Colors.red),
+          const Icon(Icons.warning_amber_rounded, color: warningRed),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -293,14 +307,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   'Initialization Required',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.red,
+                    color: warningRed,
                   ),
                 ),
                 Text(
                   'No membership plans found. Please set them up.',
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.red.withOpacity(0.8),
+                    color: warningRed.withOpacity(0.8),
                   ),
                 ),
               ],
@@ -309,7 +323,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           ElevatedButton(
             onPressed: () => context.push(AppRoutes.adminPlans),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
+              backgroundColor: warningRed,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             ),
             child: const Text('Setup', style: TextStyle(fontSize: 12)),

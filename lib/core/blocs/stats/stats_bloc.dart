@@ -13,7 +13,9 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     on<StatsEvent>((event, emit) async {
       await event.when(
         fetchDashboard: () async {
-          emit(const StatsState.loading());
+          if (state is! StatsDashboardLoaded) {
+            emit(const StatsState.loading());
+          }
           try {
             final stats = await _reportRepository.getDashboardStats();
             final plans = await _paymentRepository.getMembershipPlans();

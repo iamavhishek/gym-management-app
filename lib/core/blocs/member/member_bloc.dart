@@ -10,7 +10,9 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
     on<MemberEvent>((event, emit) async {
       await event.when(
         profileStarted: () async {
-          emit(const MemberState.loading());
+          if (state is! MemberProfileLoaded && state is! MemberUpdateSuccess) {
+            emit(const MemberState.loading());
+          }
           try {
             final member = await _memberRepository.getProfile();
             emit(MemberState.profileLoaded(member));

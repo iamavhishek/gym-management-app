@@ -36,15 +36,15 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
       },
       body: BlocBuilder<TrainerBloc, TrainerState>(
         builder: (context, state) {
-          if (state is TrainerLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is TrainerDashboardLoaded) {
-            return _buildBody(state.data);
-          } else if (state is TrainerError) {
-            return Center(child: Text('Error: ${state.message}'));
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
+          return state.maybeWhen(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            dashboardLoaded: (data) => _buildBody(data),
+            success: (message) => const Center(
+              child: CircularProgressIndicator(),
+            ), // Usually followed by re-fetch
+            error: (message) => Center(child: Text('Error: $message')),
+            orElse: () => const Center(child: CircularProgressIndicator()),
+          );
         },
       ),
     );
@@ -75,13 +75,11 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
       children: [
         Text(
           'Coach Dashboard',
-          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-            color: const Color(0xFF0F172A),
-          ),
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
         Text(
           'Empower your clients to reach their peak',
-          style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
+          style: Theme.of(context).textTheme.bodySmall,
         ),
       ],
     );
@@ -105,7 +103,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
             label: 'Active Today',
             value: '12',
             icon: Icons.trending_up_rounded,
-            color: Colors.purple,
+            color: AppTheme.primaryBlue,
             gradient: AppTheme.accentGradiant,
           ),
         ),
@@ -116,20 +114,15 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
   Widget _buildPerformanceSection() {
     return Container(
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: Colors.grey.shade100),
-      ),
+      decoration: AppTheme.premiumDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Client Metrics Overview',
-            style: TextStyle(
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1E293B),
+              letterSpacing: -0.5,
             ),
           ),
           const SizedBox(height: 24),
@@ -147,7 +140,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
       children: [
         _legendItem('Current', AppTheme.primaryBlue),
         const SizedBox(width: 24),
-        _legendItem('Target', Colors.purple),
+        _legendItem('Target', const Color(0xFF0D9488)),
       ],
     );
   }
@@ -163,7 +156,10 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
         const SizedBox(width: 8),
         Text(
           label,
-          style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+          style: const TextStyle(
+            color: AppTheme.textSecondary,
+            fontSize: 12,
+          ),
         ),
       ],
     );
@@ -211,12 +207,8 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
 
   Widget _buildClientTile(dynamic member) {
     return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.grey.shade100),
-      ),
+      padding: const EdgeInsets.all(16),
+      decoration: AppTheme.premiumDecoration(),
       child: Row(
         children: [
           CircleAvatar(
@@ -243,7 +235,10 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
                 ),
                 Text(
                   (member['goals'] as String?) ?? 'Muscle Gain',
-                  style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+                  style: const TextStyle(
+                    color: AppTheme.textSecondary,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),
@@ -253,7 +248,7 @@ class _TrainerDashboardState extends State<TrainerDashboard> {
             icon: const Icon(
               Icons.arrow_forward_ios_rounded,
               size: 16,
-              color: Colors.grey,
+              color: AppTheme.textSecondary,
             ),
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_management_app/ui/config/theme.dart';
 
 class RevenueChart extends StatelessWidget {
@@ -8,14 +9,39 @@ class RevenueChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
-      padding: const EdgeInsets.only(top: 20, right: 20, left: 10),
+      height: 220,
+      padding: const EdgeInsets.only(top: 20, right: 20, bottom: 10),
       child: LineChart(
         LineChartData(
-          gridData: const FlGridData(show: false),
+          gridData: FlGridData(
+            drawVerticalLine: false,
+            getDrawingHorizontalLine: (value) => FlLine(
+              color: AppTheme.outlineLight.withOpacity(0.5),
+              strokeWidth: 1,
+            ),
+          ),
           titlesData: FlTitlesData(
             rightTitles: const AxisTitles(),
             topTitles: const AxisTitles(),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 35,
+                getTitlesWidget: (value, meta) {
+                  if (value % 1000 == 0) {
+                    return Text(
+                      '${(value / 1000).toInt()}K',
+                      style: GoogleFonts.inter(
+                        color: AppTheme.textSecondary,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
+            ),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
@@ -30,9 +56,16 @@ class RevenueChart extends StatelessWidget {
                     'Sun',
                   ];
                   if (value.toInt() >= 0 && value.toInt() < days.length) {
-                    return Text(
-                      days[value.toInt()],
-                      style: const TextStyle(color: Colors.grey, fontSize: 10),
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        days[value.toInt()],
+                        style: GoogleFonts.inter(
+                          color: AppTheme.textSecondary,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     );
                   }
                   return const SizedBox();

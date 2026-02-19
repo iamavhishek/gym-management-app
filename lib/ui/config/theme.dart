@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static const primaryBlue = Color(0xFF2563EB);
+  // Brand Colors
+  static const primaryBlue = Color(0xFF2563EB); // Vibrant Royal Blue
+  static const primaryDark = Color(0xFF0F172A); // Deep Slate
+  static const secondaryTeal = Color(0xFF0D9488); // Grounded Teal
+
+  // Semantic Gradients
   static const primaryGradiant = LinearGradient(
     colors: [Color(0xFF2563EB), Color(0xFF3B82F6)],
     begin: Alignment.topLeft,
@@ -9,7 +15,7 @@ class AppTheme {
   );
 
   static const accentGradiant = LinearGradient(
-    colors: [Color(0xFF8B5CF6), Color(0xFFD946EF)],
+    colors: [Color(0xFF0D9488), Color(0xFF06B6D4)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -26,22 +32,44 @@ class AppTheme {
     end: Alignment.bottomRight,
   );
 
+  // Surface Colors
+  static const surfaceLight = Color(0xFFF8FAFC);
+  static const outlineLight = Color(0xFFE2E8F0);
+  static const textMain = Color(0xFF1E293B);
+  static const textSecondary = Color(0xFF64748B);
+
+  static BoxDecoration premiumDecoration({Color? color}) {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(28),
+      border: Border.all(color: outlineLight.withOpacity(0.5)),
+      boxShadow: [
+        BoxShadow(
+          color: (color ?? primaryBlue).withOpacity(0.04),
+          blurRadius: 24,
+          offset: const Offset(0, 8),
+        ),
+      ],
+    );
+  }
+
   static final lightTheme = ThemeData(
     useMaterial3: true,
     colorScheme: ColorScheme.fromSeed(
       seedColor: primaryBlue,
       primary: primaryBlue,
-      secondary: const Color(0xFF8B5CF6),
-      surface: const Color(0xFFF8FAFC),
+      secondary: secondaryTeal,
+      surface: surfaceLight,
+      outline: outlineLight,
     ),
-    scaffoldBackgroundColor: const Color(0xFFF8FAFC),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent,
-      foregroundColor: Color(0xFF1E293B),
+    scaffoldBackgroundColor: surfaceLight,
+    appBarTheme: AppBarTheme(
+      backgroundColor: surfaceLight,
+      foregroundColor: primaryDark,
       elevation: 0,
       centerTitle: true,
-      titleTextStyle: TextStyle(
-        color: Color(0xFF1E293B),
+      titleTextStyle: GoogleFonts.outfit(
+        color: primaryDark,
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
@@ -49,64 +77,72 @@ class AppTheme {
     cardTheme: CardThemeData(
       elevation: 0,
       color: Colors.white,
+      margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: Colors.grey.shade100),
+        borderRadius: BorderRadius.circular(28),
+        side: BorderSide(color: outlineLight.withOpacity(0.5)),
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: primaryBlue,
         foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         elevation: 0,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        textStyle: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: Colors.white,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(18),
+        borderSide: const BorderSide(color: outlineLight),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(18),
+        borderSide: const BorderSide(color: outlineLight),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(18),
         borderSide: const BorderSide(color: primaryBlue, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      hintStyle: GoogleFonts.inter(color: textSecondary),
     ),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: Colors.white,
-      indicatorColor: primaryBlue.withOpacity(0.1),
+      indicatorColor: primaryBlue.withOpacity(0.12),
       labelTextStyle: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return const TextStyle(
+          return GoogleFonts.inter(
             color: primaryBlue,
             fontWeight: FontWeight.bold,
             fontSize: 12,
           );
         }
-        return const TextStyle(color: Colors.grey, fontSize: 12);
+        return GoogleFonts.inter(color: textSecondary, fontSize: 12);
       }),
     ),
-    textTheme: const TextTheme(
-      headlineLarge: TextStyle(
-        color: Color(0xFF1E293B),
+    textTheme: TextTheme(
+      headlineLarge: GoogleFonts.outfit(
+        color: primaryDark,
+        fontWeight: FontWeight.bold,
+        letterSpacing: -0.5,
+      ),
+      headlineMedium: GoogleFonts.outfit(
+        color: primaryDark,
+        fontWeight: FontWeight.bold,
+        letterSpacing: -0.5,
+      ),
+      titleLarge: GoogleFonts.outfit(
+        color: primaryDark,
         fontWeight: FontWeight.bold,
       ),
-      headlineMedium: TextStyle(
-        color: Color(0xFF1E293B),
-        fontWeight: FontWeight.bold,
-      ),
-      titleLarge: TextStyle(
-        color: Color(0xFF1E293B),
-        fontWeight: FontWeight.bold,
-      ),
+      bodyLarge: GoogleFonts.inter(color: textMain, fontSize: 16),
+      bodyMedium: GoogleFonts.inter(color: textMain, fontSize: 14),
+      bodySmall: GoogleFonts.inter(color: textSecondary, fontSize: 12),
     ),
   );
 }

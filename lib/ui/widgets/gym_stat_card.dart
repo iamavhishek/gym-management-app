@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 
 class GymStatCard extends StatelessWidget {
   final String label;
@@ -19,20 +20,9 @@ class GymStatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: (color ?? Colors.blue).withOpacity(0.05),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-        border: Border.all(color: Colors.grey.shade50),
-      ),
+      decoration: AppTheme.premiumDecoration(color: color),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,30 +30,33 @@ class GymStatCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: (color ?? Colors.blue).withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-                gradient: gradient?.withOpacity(0.1),
+                color: (color ?? AppTheme.primaryBlue).withOpacity(0.08),
+                borderRadius: BorderRadius.circular(14),
               ),
-              child: Icon(icon, color: color ?? Colors.blue, size: 20),
+              child: Icon(
+                icon,
+                color: color ?? AppTheme.primaryBlue,
+                size: 22,
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   value,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF1E293B),
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   label,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey.shade500,
-                    fontWeight: FontWeight.w500,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.textSecondary,
                   ),
                 ),
               ],

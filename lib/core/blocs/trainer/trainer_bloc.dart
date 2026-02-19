@@ -51,7 +51,9 @@ class TrainerBloc extends Bloc<TrainerEvent, TrainerState> {
           }
         },
         fetchDashboard: () async {
-          emit(const TrainerState.loading());
+          if (state is! TrainerDashboardLoaded) {
+            emit(const TrainerState.loading());
+          }
           try {
             final data = await _trainerRepository.getDashboardData();
             emit(TrainerState.dashboardLoaded(data));

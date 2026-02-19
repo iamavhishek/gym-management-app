@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_management_app/core/blocs/plans/plans_bloc.dart';
 import 'package:gym_management_app/core/blocs/plans/plans_event.dart';
 import 'package:gym_management_app/core/blocs/plans/plans_state.dart';
 import 'package:gym_management_app/core/config/constants.dart';
 import 'package:gym_management_app/core/models/payment_model.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 
 class PlansScreen extends StatefulWidget {
   const PlansScreen({super.key});
@@ -72,14 +74,24 @@ class _PlansScreenState extends State<PlansScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.card_membership, size: 80, color: Colors.grey),
+          Icon(
+            Icons.card_membership_rounded,
+            size: 80,
+            color: AppTheme.textSecondary.withOpacity(0.4),
+          ),
           const SizedBox(height: 16),
           Text(
             'No membership plans found',
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 8),
-          const Text('Create a plan to start adding members'),
+          Text(
+            'Create a plan to start adding members',
+            style: GoogleFonts.inter(
+              color: AppTheme.textSecondary,
+              fontSize: 14,
+            ),
+          ),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => _showPlanDialog(),
@@ -91,125 +103,148 @@ class _PlansScreenState extends State<PlansScreen> {
   }
 
   Widget _buildPlanCard(MembershipPlanModel plan) {
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    plan.name,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue.shade800,
-                    ),
+      padding: const EdgeInsets.all(20),
+      decoration: AppTheme.premiumDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  plan.name,
+                  style: GoogleFonts.outfit(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.primaryDark,
                   ),
                 ),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.blue),
-                      onPressed: () => _showPlanDialog(plan: plan),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () => _confirmDelete(plan),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: plan.isActive
-                        ? Colors.green.shade50
-                        : Colors.red.shade50,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: plan.isActive ? Colors.green : Colors.red,
-                    ),
-                  ),
-                  child: Text(
-                    plan.isActive ? 'ACTIVE' : 'INACTIVE',
-                    style: TextStyle(
-                      color: plan.isActive ? Colors.green : Colors.red,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              plan.description,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                _buildInfoChip(
-                  Icons.payments,
-                  '${AppConstants.currencySymbol} ${plan.price}',
-                ),
-                const SizedBox(width: 8),
-                _buildInfoChip(Icons.timer, '${plan.duration} Days'),
-                const SizedBox(width: 8),
-                _buildInfoChip(Icons.category, (plan.type ?? '').toUpperCase()),
-              ],
-            ),
-            if (plan.features.isNotEmpty) ...[
-              const SizedBox(height: 16),
-              const Text(
-                'Features:',
-                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 4),
-              ...plan.features.map(
-                (f) => Row(
-                  children: [
-                    const Icon(Icons.check, size: 16, color: Colors.green),
-                    const SizedBox(width: 8),
-                    Text(f),
-                  ],
-                ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.edit_outlined,
+                      color: AppTheme.primaryBlue,
+                      size: 20,
+                    ),
+                    onPressed: () => _showPlanDialog(plan: plan),
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.delete_outline_rounded,
+                      color: Color(0xFFEF4444),
+                      size: 20,
+                    ),
+                    onPressed: () => _confirmDelete(plan),
+                  ),
+                ],
               ),
             ],
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: plan.isActive
+                  ? const Color(0xFF10B981).withOpacity(0.1)
+                  : const Color(0xFFEF4444).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              plan.isActive ? 'ACTIVE' : 'INACTIVE',
+              style: GoogleFonts.inter(
+                color: plan.isActive
+                    ? const Color(0xFF10B981)
+                    : const Color(0xFFEF4444),
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            plan.description,
+            style: GoogleFonts.inter(
+              color: AppTheme.textSecondary,
+              fontSize: 13,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              _buildInfoChip(
+                Icons.payments_outlined,
+                '${AppConstants.currencySymbol} ${plan.price}',
+              ),
+              const SizedBox(width: 8),
+              _buildInfoChip(Icons.timer_outlined, '${plan.duration} Days'),
+              const SizedBox(width: 8),
+              _buildInfoChip(
+                Icons.category_outlined,
+                (plan.type ?? '').toUpperCase(),
+              ),
+            ],
+          ),
+          if (plan.features.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Text(
+              'Features:',
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+                color: AppTheme.textMain,
+              ),
+            ),
+            const SizedBox(height: 6),
+            ...plan.features.map(
+              (f) => Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.check_circle_rounded,
+                      size: 16,
+                      color: Color(0xFF10B981),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      f,
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        color: AppTheme.textMain,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
-        ),
+        ],
       ),
     );
   }
 
   Widget _buildInfoChip(IconData icon, String label) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.blue.shade50,
-        borderRadius: BorderRadius.circular(8),
+        color: AppTheme.primaryBlue.withOpacity(0.06),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         children: [
-          Icon(icon, size: 14, color: Colors.blue.shade800),
+          Icon(icon, size: 14, color: AppTheme.primaryBlue),
           const SizedBox(width: 4),
           Text(
             label,
-            style: TextStyle(
-              color: Colors.blue.shade800,
+            style: GoogleFonts.inter(
+              color: AppTheme.primaryBlue,
               fontSize: 12,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -335,7 +370,10 @@ class _PlansScreenState extends State<PlansScreen> {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.add_circle, color: Colors.blue),
+                      icon: const Icon(
+                        Icons.add_circle_rounded,
+                        color: AppTheme.primaryBlue,
+                      ),
                       onPressed: () {
                         if (featureController.text.isNotEmpty) {
                           setModalState(() {

@@ -39,6 +39,28 @@ class PaymentRepository {
     );
   }
 
+  Future<void> updatePayment({
+    required String id,
+    String? amount,
+    String? paymentMethod,
+    String? status,
+    String? notes,
+  }) async {
+    await _apiRepository.put(
+      '/payments/$id',
+      body: {
+        'amount': ?amount,
+        'paymentMethod': ?paymentMethod,
+        'status': ?status,
+        'notes': ?notes,
+      },
+    );
+  }
+
+  Future<void> deletePayment(String id) async {
+    await _apiRepository.delete('/payments/$id');
+  }
+
   Future<List<MembershipPlanModel>> getMembershipPlans() async {
     try {
       final response = await _apiRepository.get('/membership-plans');

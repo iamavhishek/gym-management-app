@@ -8,6 +8,7 @@ import 'package:gym_management_app/core/blocs/member/member_event.dart';
 import 'package:gym_management_app/core/blocs/member/member_state.dart';
 import 'package:gym_management_app/core/config/routes.dart';
 import 'package:gym_management_app/core/models/member_model.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 
 class MembersScreen extends StatefulWidget {
   const MembersScreen({super.key});
@@ -47,18 +48,14 @@ class _MembersScreenState extends State<MembersScreen> {
       appBar: AppBar(
         title: const Text('Members'),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
+          preferredSize: const Size.fromHeight(80),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Search members...',
-                prefixIcon: const Icon(Icons.search),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                prefixIcon: Icon(Icons.search, size: 20),
+                contentPadding: EdgeInsets.symmetric(),
               ),
               onChanged: (value) => setState(() => _searchQuery = value),
             ),
@@ -113,67 +110,81 @@ class _MembersScreenState extends State<MembersScreen> {
 
   Widget _buildMemberCard(MemberModel member) {
     final statusColor = (member.status?.toLowerCase() == 'active')
-        ? Colors.green
-        : Colors.red;
+        ? const Color(0xFF10B981)
+        : const Color(0xFFEF4444);
 
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      decoration: AppTheme.premiumDecoration(),
       child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.blue,
-          child: Text(
-            '${member.user?.firstName[0] ?? 'M'}${member.user?.lastName[0] ?? ''}',
-            style: const TextStyle(color: Colors.white),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: AppTheme.primaryBlue.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Text(
+              '${member.user?.firstName[0] ?? 'M'}${member.user?.lastName[0] ?? ''}',
+              style: const TextStyle(
+                color: AppTheme.primaryBlue,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
         title: Text(
           '${member.user?.firstName ?? 'Unknown'} ${member.user?.lastName ?? ''}',
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ID: ${member.membershipNumber}'),
+            const SizedBox(height: 4),
+            Text(
+              'ID: ${member.membershipNumber}',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 2,
+                    horizontal: 10,
+                    vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: statusColor.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(4),
+                    color: statusColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
                     member.status?.toUpperCase() ?? 'UNKNOWN',
-                    style: TextStyle(color: statusColor, fontSize: 12),
+                    style: TextStyle(
+                      color: statusColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
-                Text(member.planName ?? 'No Plan'),
+                Expanded(
+                  child: Text(
+                    member.planName ?? 'No Plan',
+                    style: Theme.of(context).textTheme.bodySmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ],
             ),
           ],
         ),
-        trailing: PopupMenuButton(
-          itemBuilder: (context) => [
-            const PopupMenuItem(value: 'view', child: Text('View Details')),
-            const PopupMenuItem(value: 'edit', child: Text('Edit')),
-          ],
-          onSelected: (value) {
-            switch (value) {
-              case 'view':
-                context.push(
-                  '${AppRoutes.adminMembers}/${member.id}',
-                );
-                break;
-              case 'edit':
-                context.push(
-                  '${AppRoutes.adminMembers}/${member.id}/edit',
-                );
-                break;
-            }
-          },
+        trailing: const Icon(
+          Icons.chevron_right_rounded,
+          color: AppTheme.textSecondary,
         ),
         onTap: () => context.push(
           '${AppRoutes.adminMembers}/${member.id}',

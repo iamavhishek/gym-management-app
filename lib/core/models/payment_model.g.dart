@@ -10,6 +10,7 @@ _PaymentModel _$PaymentModelFromJson(Map<String, dynamic> json) =>
     _PaymentModel(
       id: json['id'] as String,
       membershipId: json['membershipId'] as String,
+      memberId: json['memberId'] as String?,
       amount: json['amount'] as String,
       paymentMethod: json['paymentMethod'] as String,
       status: json['status'] as String,
@@ -28,6 +29,7 @@ Map<String, dynamic> _$PaymentModelToJson(_PaymentModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'membershipId': instance.membershipId,
+      'memberId': instance.memberId,
       'amount': instance.amount,
       'paymentMethod': instance.paymentMethod,
       'status': instance.status,

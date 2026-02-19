@@ -8,6 +8,7 @@ import 'package:gym_management_app/core/blocs/workout/workout_event.dart';
 import 'package:gym_management_app/core/blocs/workout/workout_state.dart';
 import 'package:gym_management_app/core/models/member_model.dart';
 import 'package:gym_management_app/core/models/workout_model.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -91,7 +92,7 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Error: ${state.message}'),
-                backgroundColor: Colors.red,
+                backgroundColor: const Color(0xFFEF4444),
               ),
             );
           }
@@ -223,7 +224,7 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
                   'Template Logic: Days are relative to start date when assigned.',
                   style: TextStyle(
                     fontStyle: FontStyle.italic,
-                    color: Colors.grey,
+                    color: AppTheme.textSecondary,
                   ),
                 ),
               ),
@@ -248,7 +249,7 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
                   padding: EdgeInsets.all(24),
                   child: Text(
                     'No sessions added yet',
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(color: AppTheme.textSecondary),
                   ),
                 ),
               )
@@ -296,7 +297,7 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
           '${session.notes?.isNotEmpty == true ? '${session.notes} • ' : ''}${session.sets} sets x ${session.reps} reps • ${session.weight?.isNotEmpty == true ? session.weight : 'Bodyweight'}',
         ),
         trailing: IconButton(
-          icon: const Icon(Icons.delete, color: Colors.red),
+          icon: const Icon(Icons.delete, color: Color(0xFFEF4444)),
           onPressed: () => setState(() => _sessions.removeAt(index)),
         ),
       ),

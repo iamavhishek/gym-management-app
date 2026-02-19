@@ -20,14 +20,24 @@ class ActivityChart extends StatelessWidget {
               sideTitles: SideTitles(
                 showTitles: true,
                 getTitlesWidget: (value, meta) {
-                  const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+                  const days = [
+                    'MON',
+                    'TUE',
+                    'WED',
+                    'THU',
+                    'FRI',
+                    'SAT',
+                    'SUN',
+                  ];
                   if (value.toInt() >= 0 && value.toInt() < days.length) {
-                    return Text(
-                      days[value.toInt()],
-                      style: TextStyle(
-                        color: Colors.grey.shade400,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text(
+                        days[value.toInt()],
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontSize: 9,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     );
                   }
@@ -57,7 +67,7 @@ class ActivityChart extends StatelessWidget {
       barRods: [
         BarChartRodData(
           toY: y,
-          gradient: AppTheme.accentGradiant,
+          gradient: AppTheme.primaryGradiant,
           width: 12,
           borderRadius: BorderRadius.circular(4),
           backDrawRodData: BackgroundBarChartRodData(

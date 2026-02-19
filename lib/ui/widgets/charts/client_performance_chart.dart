@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_management_app/ui/config/theme.dart';
 
 class ClientPerformanceChart extends StatelessWidget {
@@ -14,7 +15,10 @@ class ClientPerformanceChart extends StatelessWidget {
         RadarChartData(
           radarShape: RadarShape.circle,
           titlePositionPercentageOffset: 0.2,
-          titleTextStyle: const TextStyle(color: Colors.grey, fontSize: 10),
+          titleTextStyle: GoogleFonts.inter(
+            color: AppTheme.textSecondary,
+            fontSize: 10,
+          ),
           dataSets: [
             RadarDataSet(
               fillColor: AppTheme.primaryBlue.withOpacity(0.2),
@@ -29,8 +33,8 @@ class ClientPerformanceChart extends StatelessWidget {
               ],
             ),
             RadarDataSet(
-              fillColor: Colors.purple.withOpacity(0.1),
-              borderColor: Colors.purple,
+              fillColor: AppTheme.secondaryTeal.withOpacity(0.1),
+              borderColor: AppTheme.secondaryTeal,
               entryRadius: 2,
               dataEntries: [
                 const RadarEntry(value: 60),
@@ -42,8 +46,8 @@ class ClientPerformanceChart extends StatelessWidget {
             ),
           ],
           radarBorderData: const BorderSide(color: Colors.transparent),
-          tickBorderData: BorderSide(color: Colors.grey.shade100),
-          gridBorderData: BorderSide(color: Colors.grey.shade100),
+          tickBorderData: const BorderSide(color: AppTheme.outlineLight),
+          gridBorderData: const BorderSide(color: AppTheme.outlineLight),
         ),
       ),
     );

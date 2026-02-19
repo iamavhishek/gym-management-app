@@ -8,9 +8,9 @@ abstract class PaymentModel with _$PaymentModel {
   const factory PaymentModel({
     required String id,
     required String membershipId,
+    String? memberId,
     required String amount,
-    required String
-    paymentMethod, // 'cash', 'bank_transfer', 'card', 'upi', 'wallet'
+    required String paymentMethod, // 'cash', 'bank_transfer', 'card', 'qr'
     required String status, // 'completed', 'pending', 'failed', 'refunded'
     DateTime? paymentDate,
     String? transactionId,

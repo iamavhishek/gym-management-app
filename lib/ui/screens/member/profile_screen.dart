@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_management_app/core/blocs/auth/auth_bloc.dart';
 import 'package:gym_management_app/core/blocs/auth/auth_event.dart';
 import 'package:gym_management_app/core/blocs/member/member_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:gym_management_app/core/blocs/member/member_event.dart';
 import 'package:gym_management_app/core/blocs/member/member_state.dart';
 import 'package:gym_management_app/core/config/routes.dart';
 import 'package:gym_management_app/core/models/member_model.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -76,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Error: ${state.message}'),
-                backgroundColor: Colors.red,
+                backgroundColor: const Color(0xFFEF4444),
               ),
             );
           }
@@ -132,54 +134,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         CircleAvatar(
           radius: 50,
-          backgroundColor: Colors.blue,
+          backgroundColor: AppTheme.primaryBlue,
           child: Text(
             initials.toUpperCase(),
-            style: const TextStyle(fontSize: 32, color: Colors.white),
+            style: GoogleFonts.outfit(
+              fontSize: 32,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         const SizedBox(height: 16),
         Text(
           '$firstName $lastName',
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: GoogleFonts.outfit(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: AppTheme.primaryDark,
+          ),
         ),
         Text(
           profile.membershipNumber,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+          style: GoogleFonts.inter(
+            color: AppTheme.textSecondary,
+            fontSize: 14,
+          ),
         ),
       ],
     );
   }
 
   Widget _buildInfoSection(MemberModel profile) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Contact Information',
-              style: Theme.of(context).textTheme.titleMedium,
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: AppTheme.premiumDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Contact Information',
+            style: GoogleFonts.outfit(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.primaryDark,
             ),
-            const SizedBox(height: 12),
-            _buildInfoRow(Icons.email, 'Email', profile.user?.email ?? 'N/A'),
-            if (_editing)
-              TextFormField(
-                controller: _phoneController,
-                decoration: const InputDecoration(labelText: 'Phone'),
-                keyboardType: TextInputType.phone,
-              )
-            else
-              _buildInfoRow(
-                Icons.phone,
-                'Phone',
-                profile.user?.phone ?? 'Not set',
-              ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 12),
+          _buildInfoRow(Icons.email, 'Email', profile.user?.email ?? 'N/A'),
+          if (_editing)
+            TextFormField(
+              controller: _phoneController,
+              decoration: const InputDecoration(labelText: 'Phone'),
+              keyboardType: TextInputType.phone,
+            )
+          else
+            _buildInfoRow(
+              Icons.phone,
+              'Phone',
+              profile.user?.phone ?? 'Not set',
+            ),
+        ],
       ),
     );
   }
@@ -189,16 +203,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Icon(icon, size: 20, color: Colors.grey),
+          Icon(icon, size: 20, color: AppTheme.textSecondary),
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 label,
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  color: AppTheme.textSecondary,
+                ),
               ),
-              Expanded(child: Text(value)),
+              Text(
+                value,
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  color: AppTheme.textMain,
+                ),
+              ),
             ],
           ),
         ],
@@ -207,54 +230,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildBodyMetrics(MemberModel profile) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Body Metrics',
-              style: Theme.of(context).textTheme.titleMedium,
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: AppTheme.premiumDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Body Metrics',
+            style: GoogleFonts.outfit(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.primaryDark,
             ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: _editing
-                      ? TextFormField(
-                          controller: _heightController,
-                          decoration: const InputDecoration(
-                            labelText: 'Height (cm)',
-                          ),
-                          keyboardType: TextInputType.number,
-                        )
-                      : _buildMetricCard(
-                          'Height',
-                          '${profile.height ?? 'N/A'} cm',
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _editing
+                    ? TextFormField(
+                        controller: _heightController,
+                        decoration: const InputDecoration(
+                          labelText: 'Height (cm)',
                         ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _editing
-                      ? TextFormField(
-                          controller: _weightController,
-                          decoration: const InputDecoration(
-                            labelText: 'Weight (kg)',
-                          ),
-                          keyboardType: TextInputType.number,
-                        )
-                      : _buildMetricCard(
-                          'Weight',
-                          '${profile.weight ?? 'N/A'} kg',
+                        keyboardType: TextInputType.number,
+                      )
+                    : _buildMetricCard(
+                        'Height',
+                        '${profile.height ?? 'N/A'} cm',
+                      ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _editing
+                    ? TextFormField(
+                        controller: _weightController,
+                        decoration: const InputDecoration(
+                          labelText: 'Weight (kg)',
                         ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            _buildMetricCard('BMI', profile.bmi ?? 'N/A'),
-          ],
-        ),
+                        keyboardType: TextInputType.number,
+                      )
+                    : _buildMetricCard(
+                        'Weight',
+                        '${profile.weight ?? 'N/A'} kg',
+                      ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          _buildMetricCard('BMI', profile.bmi ?? 'N/A'),
+        ],
       ),
     );
   }
@@ -263,42 +289,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(8),
+        color: AppTheme.surfaceLight,
+        borderRadius: BorderRadius.circular(14),
       ),
       child: Column(
         children: [
-          Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-          Text(value, style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              color: AppTheme.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: GoogleFonts.outfit(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.primaryDark,
+            ),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildGoalsSection(MemberModel profile) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Fitness Goals',
-              style: Theme.of(context).textTheme.titleMedium,
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: AppTheme.premiumDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Fitness Goals',
+            style: GoogleFonts.outfit(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.primaryDark,
             ),
-            const SizedBox(height: 12),
-            if (_editing)
-              TextFormField(
-                controller: _goalsController,
-                decoration: const InputDecoration(
-                  hintText: 'Enter your fitness goals',
-                ),
-                maxLines: 3,
-              )
-            else
-              Text(profile.goals ?? 'No goals set'),
-          ],
-        ),
+          ),
+          const SizedBox(height: 12),
+          if (_editing)
+            TextFormField(
+              controller: _goalsController,
+              decoration: const InputDecoration(
+                hintText: 'Enter your fitness goals',
+              ),
+              maxLines: 3,
+            )
+          else
+            Text(
+              profile.goals ?? 'No goals set',
+              style: GoogleFonts.inter(
+                color: AppTheme.textMain,
+                fontSize: 14,
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -330,7 +379,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           context.read<AuthBloc>().add(const AuthEvent.logout());
           Navigator.pushReplacementNamed(context, AppRoutes.login);
         },
-        style: OutlinedButton.styleFrom(foregroundColor: Colors.red),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: const Color(0xFFEF4444),
+          side: const BorderSide(color: Color(0xFFEF4444)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+        ),
         child: const Text('Logout'),
       ),
     );

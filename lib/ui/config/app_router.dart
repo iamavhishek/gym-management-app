@@ -12,9 +12,11 @@ import 'package:gym_management_app/ui/config/theme.dart';
 import 'package:gym_management_app/ui/screens/admin/add_member_screen.dart';
 import 'package:gym_management_app/ui/screens/admin/add_trainer_screen.dart';
 import 'package:gym_management_app/ui/screens/admin/dashboard_screen.dart';
+import 'package:gym_management_app/ui/screens/admin/edit_membership_screen.dart';
 import 'package:gym_management_app/ui/screens/admin/member_detail_screen.dart';
 import 'package:gym_management_app/ui/screens/admin/payments_screen.dart';
 import 'package:gym_management_app/ui/screens/admin/plans_screen.dart';
+import 'package:gym_management_app/ui/screens/admin/record_payment_screen.dart';
 import 'package:gym_management_app/ui/screens/admin/reports_screen.dart';
 import 'package:gym_management_app/ui/screens/admin/trainer_detail_screen.dart';
 import 'package:gym_management_app/ui/screens/admin/trainers_screen.dart';
@@ -182,6 +184,12 @@ class AppRouter {
                           ),
                         ),
                         GoRoute(
+                          path: 'membership-edit',
+                          builder: (context, state) => EditMembershipScreen(
+                            memberId: state.pathParameters['id']!,
+                          ),
+                        ),
+                        GoRoute(
                           path: 'workouts',
                           builder: (context, state) => WorkoutPlanScreen(
                             memberId: state.pathParameters['id'],
@@ -225,7 +233,23 @@ class AppRouter {
               routes: [
                 GoRoute(
                   path: AppRoutes.adminPayments,
-                  builder: (context, state) => const PaymentsScreen(),
+                  builder: (context, state) {
+                    final args = state.extra as Map<String, dynamic>?;
+                    return PaymentsScreen(
+                      memberId: args?['memberId'] as String?,
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                      path: 'record',
+                      builder: (context, state) {
+                        final args = state.extra as Map<String, dynamic>?;
+                        return RecordPaymentScreen(
+                          initialMemberId: args?['memberId'] as String?,
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

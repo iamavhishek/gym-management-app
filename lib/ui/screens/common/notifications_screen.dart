@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_management_app/core/blocs/notification/notification_bloc.dart';
 import 'package:gym_management_app/core/blocs/notification/notification_event.dart';
 import 'package:gym_management_app/core/blocs/notification/notification_state.dart';
 import 'package:gym_management_app/core/models/notification_model.dart';
+import 'package:gym_management_app/ui/config/theme.dart';
 import 'package:intl/intl.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -99,7 +101,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           Text(notification.message),
           Text(
             DateFormat('MMM dd, hh:mm a').format(notification.createdAt),
-            style: const TextStyle(fontSize: 12, color: Colors.grey),
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              color: AppTheme.textSecondary,
+            ),
           ),
         ],
       ),
@@ -110,7 +115,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           );
         }
       },
-      tileColor: notification.isRead ? null : Colors.blue.shade50,
+      tileColor: notification.isRead
+          ? null
+          : AppTheme.primaryBlue.withOpacity(0.04),
     );
   }
 
@@ -129,12 +136,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Color _getNotificationColor(String type) {
     switch (type.toLowerCase()) {
       case 'payment':
-        return Colors.green;
+        return const Color(0xFF10B981);
 
       case 'attendance':
-        return Colors.orange;
+        return const Color(0xFFF59E0B);
       default:
-        return Colors.grey;
+        return AppTheme.textSecondary;
     }
   }
 }

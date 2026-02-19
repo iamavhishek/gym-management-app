@@ -53,6 +53,32 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
                 emit(PaymentState.error(e.toString()));
               }
             },
+        updatePayment: (id, amount, paymentMethod, status, notes) async {
+          emit(const PaymentState.loading());
+          try {
+            await _paymentRepository.updatePayment(
+              id: id,
+              amount: amount,
+              paymentMethod: paymentMethod,
+              status: status,
+              notes: notes,
+            );
+            emit(const PaymentState.success('Payment updated successfully'));
+            add(const PaymentEvent.fetchPayments());
+          } catch (e) {
+            emit(PaymentState.error(e.toString()));
+          }
+        },
+        deletePayment: (id) async {
+          emit(const PaymentState.loading());
+          try {
+            await _paymentRepository.deletePayment(id);
+            emit(const PaymentState.success('Payment deleted successfully'));
+            add(const PaymentEvent.fetchPayments());
+          } catch (e) {
+            emit(PaymentState.error(e.toString()));
+          }
+        },
       );
     });
   }

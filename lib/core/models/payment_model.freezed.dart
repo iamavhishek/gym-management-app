@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PaymentModel {
 
- String get id; String get membershipId; String get amount; String get paymentMethod;// 'cash', 'bank_transfer', 'card', 'upi', 'wallet'
+ String get id; String get membershipId; String? get memberId; String get amount; String get paymentMethod;// 'cash', 'bank_transfer', 'card', 'upi', 'wallet'
  String get status;// 'completed', 'pending', 'failed', 'refunded'
  DateTime? get paymentDate; String? get transactionId; String? get invoiceNumber; String? get notes; String? get dueDate; String? get promoCode; String? get discountAmount;
 /// Create a copy of PaymentModel
@@ -30,16 +30,16 @@ $PaymentModelCopyWith<PaymentModel> get copyWith => _$PaymentModelCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PaymentModel&&(identical(other.id, id) || other.id == id)&&(identical(other.membershipId, membershipId) || other.membershipId == membershipId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.status, status) || other.status == status)&&(identical(other.paymentDate, paymentDate) || other.paymentDate == paymentDate)&&(identical(other.transactionId, transactionId) || other.transactionId == transactionId)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.dueDate, dueDate) || other.dueDate == dueDate)&&(identical(other.promoCode, promoCode) || other.promoCode == promoCode)&&(identical(other.discountAmount, discountAmount) || other.discountAmount == discountAmount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PaymentModel&&(identical(other.id, id) || other.id == id)&&(identical(other.membershipId, membershipId) || other.membershipId == membershipId)&&(identical(other.memberId, memberId) || other.memberId == memberId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.status, status) || other.status == status)&&(identical(other.paymentDate, paymentDate) || other.paymentDate == paymentDate)&&(identical(other.transactionId, transactionId) || other.transactionId == transactionId)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.dueDate, dueDate) || other.dueDate == dueDate)&&(identical(other.promoCode, promoCode) || other.promoCode == promoCode)&&(identical(other.discountAmount, discountAmount) || other.discountAmount == discountAmount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,membershipId,amount,paymentMethod,status,paymentDate,transactionId,invoiceNumber,notes,dueDate,promoCode,discountAmount);
+int get hashCode => Object.hash(runtimeType,id,membershipId,memberId,amount,paymentMethod,status,paymentDate,transactionId,invoiceNumber,notes,dueDate,promoCode,discountAmount);
 
 @override
 String toString() {
-  return 'PaymentModel(id: $id, membershipId: $membershipId, amount: $amount, paymentMethod: $paymentMethod, status: $status, paymentDate: $paymentDate, transactionId: $transactionId, invoiceNumber: $invoiceNumber, notes: $notes, dueDate: $dueDate, promoCode: $promoCode, discountAmount: $discountAmount)';
+  return 'PaymentModel(id: $id, membershipId: $membershipId, memberId: $memberId, amount: $amount, paymentMethod: $paymentMethod, status: $status, paymentDate: $paymentDate, transactionId: $transactionId, invoiceNumber: $invoiceNumber, notes: $notes, dueDate: $dueDate, promoCode: $promoCode, discountAmount: $discountAmount)';
 }
 
 
@@ -50,7 +50,7 @@ abstract mixin class $PaymentModelCopyWith<$Res>  {
   factory $PaymentModelCopyWith(PaymentModel value, $Res Function(PaymentModel) _then) = _$PaymentModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String membershipId, String amount, String paymentMethod, String status, DateTime? paymentDate, String? transactionId, String? invoiceNumber, String? notes, String? dueDate, String? promoCode, String? discountAmount
+ String id, String membershipId, String? memberId, String amount, String paymentMethod, String status, DateTime? paymentDate, String? transactionId, String? invoiceNumber, String? notes, String? dueDate, String? promoCode, String? discountAmount
 });
 
 
@@ -67,11 +67,12 @@ class _$PaymentModelCopyWithImpl<$Res>
 
 /// Create a copy of PaymentModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? membershipId = null,Object? amount = null,Object? paymentMethod = null,Object? status = null,Object? paymentDate = freezed,Object? transactionId = freezed,Object? invoiceNumber = freezed,Object? notes = freezed,Object? dueDate = freezed,Object? promoCode = freezed,Object? discountAmount = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? membershipId = null,Object? memberId = freezed,Object? amount = null,Object? paymentMethod = null,Object? status = null,Object? paymentDate = freezed,Object? transactionId = freezed,Object? invoiceNumber = freezed,Object? notes = freezed,Object? dueDate = freezed,Object? promoCode = freezed,Object? discountAmount = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,membershipId: null == membershipId ? _self.membershipId : membershipId // ignore: cast_nullable_to_non_nullable
-as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as String,memberId: freezed == memberId ? _self.memberId : memberId // ignore: cast_nullable_to_non_nullable
+as String?,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as String,paymentMethod: null == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,paymentDate: freezed == paymentDate ? _self.paymentDate : paymentDate // ignore: cast_nullable_to_non_nullable
@@ -166,10 +167,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String membershipId,  String amount,  String paymentMethod,  String status,  DateTime? paymentDate,  String? transactionId,  String? invoiceNumber,  String? notes,  String? dueDate,  String? promoCode,  String? discountAmount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String membershipId,  String? memberId,  String amount,  String paymentMethod,  String status,  DateTime? paymentDate,  String? transactionId,  String? invoiceNumber,  String? notes,  String? dueDate,  String? promoCode,  String? discountAmount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PaymentModel() when $default != null:
-return $default(_that.id,_that.membershipId,_that.amount,_that.paymentMethod,_that.status,_that.paymentDate,_that.transactionId,_that.invoiceNumber,_that.notes,_that.dueDate,_that.promoCode,_that.discountAmount);case _:
+return $default(_that.id,_that.membershipId,_that.memberId,_that.amount,_that.paymentMethod,_that.status,_that.paymentDate,_that.transactionId,_that.invoiceNumber,_that.notes,_that.dueDate,_that.promoCode,_that.discountAmount);case _:
   return orElse();
 
 }
@@ -187,10 +188,10 @@ return $default(_that.id,_that.membershipId,_that.amount,_that.paymentMethod,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String membershipId,  String amount,  String paymentMethod,  String status,  DateTime? paymentDate,  String? transactionId,  String? invoiceNumber,  String? notes,  String? dueDate,  String? promoCode,  String? discountAmount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String membershipId,  String? memberId,  String amount,  String paymentMethod,  String status,  DateTime? paymentDate,  String? transactionId,  String? invoiceNumber,  String? notes,  String? dueDate,  String? promoCode,  String? discountAmount)  $default,) {final _that = this;
 switch (_that) {
 case _PaymentModel():
-return $default(_that.id,_that.membershipId,_that.amount,_that.paymentMethod,_that.status,_that.paymentDate,_that.transactionId,_that.invoiceNumber,_that.notes,_that.dueDate,_that.promoCode,_that.discountAmount);case _:
+return $default(_that.id,_that.membershipId,_that.memberId,_that.amount,_that.paymentMethod,_that.status,_that.paymentDate,_that.transactionId,_that.invoiceNumber,_that.notes,_that.dueDate,_that.promoCode,_that.discountAmount);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +208,10 @@ return $default(_that.id,_that.membershipId,_that.amount,_that.paymentMethod,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String membershipId,  String amount,  String paymentMethod,  String status,  DateTime? paymentDate,  String? transactionId,  String? invoiceNumber,  String? notes,  String? dueDate,  String? promoCode,  String? discountAmount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String membershipId,  String? memberId,  String amount,  String paymentMethod,  String status,  DateTime? paymentDate,  String? transactionId,  String? invoiceNumber,  String? notes,  String? dueDate,  String? promoCode,  String? discountAmount)?  $default,) {final _that = this;
 switch (_that) {
 case _PaymentModel() when $default != null:
-return $default(_that.id,_that.membershipId,_that.amount,_that.paymentMethod,_that.status,_that.paymentDate,_that.transactionId,_that.invoiceNumber,_that.notes,_that.dueDate,_that.promoCode,_that.discountAmount);case _:
+return $default(_that.id,_that.membershipId,_that.memberId,_that.amount,_that.paymentMethod,_that.status,_that.paymentDate,_that.transactionId,_that.invoiceNumber,_that.notes,_that.dueDate,_that.promoCode,_that.discountAmount);case _:
   return null;
 
 }
@@ -222,11 +223,12 @@ return $default(_that.id,_that.membershipId,_that.amount,_that.paymentMethod,_th
 @JsonSerializable()
 
 class _PaymentModel implements PaymentModel {
-  const _PaymentModel({required this.id, required this.membershipId, required this.amount, required this.paymentMethod, required this.status, this.paymentDate, this.transactionId, this.invoiceNumber, this.notes, this.dueDate, this.promoCode, this.discountAmount});
+  const _PaymentModel({required this.id, required this.membershipId, this.memberId, required this.amount, required this.paymentMethod, required this.status, this.paymentDate, this.transactionId, this.invoiceNumber, this.notes, this.dueDate, this.promoCode, this.discountAmount});
   factory _PaymentModel.fromJson(Map<String, dynamic> json) => _$PaymentModelFromJson(json);
 
 @override final  String id;
 @override final  String membershipId;
+@override final  String? memberId;
 @override final  String amount;
 @override final  String paymentMethod;
 // 'cash', 'bank_transfer', 'card', 'upi', 'wallet'
@@ -253,16 +255,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PaymentModel&&(identical(other.id, id) || other.id == id)&&(identical(other.membershipId, membershipId) || other.membershipId == membershipId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.status, status) || other.status == status)&&(identical(other.paymentDate, paymentDate) || other.paymentDate == paymentDate)&&(identical(other.transactionId, transactionId) || other.transactionId == transactionId)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.dueDate, dueDate) || other.dueDate == dueDate)&&(identical(other.promoCode, promoCode) || other.promoCode == promoCode)&&(identical(other.discountAmount, discountAmount) || other.discountAmount == discountAmount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PaymentModel&&(identical(other.id, id) || other.id == id)&&(identical(other.membershipId, membershipId) || other.membershipId == membershipId)&&(identical(other.memberId, memberId) || other.memberId == memberId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.status, status) || other.status == status)&&(identical(other.paymentDate, paymentDate) || other.paymentDate == paymentDate)&&(identical(other.transactionId, transactionId) || other.transactionId == transactionId)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.dueDate, dueDate) || other.dueDate == dueDate)&&(identical(other.promoCode, promoCode) || other.promoCode == promoCode)&&(identical(other.discountAmount, discountAmount) || other.discountAmount == discountAmount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,membershipId,amount,paymentMethod,status,paymentDate,transactionId,invoiceNumber,notes,dueDate,promoCode,discountAmount);
+int get hashCode => Object.hash(runtimeType,id,membershipId,memberId,amount,paymentMethod,status,paymentDate,transactionId,invoiceNumber,notes,dueDate,promoCode,discountAmount);
 
 @override
 String toString() {
-  return 'PaymentModel(id: $id, membershipId: $membershipId, amount: $amount, paymentMethod: $paymentMethod, status: $status, paymentDate: $paymentDate, transactionId: $transactionId, invoiceNumber: $invoiceNumber, notes: $notes, dueDate: $dueDate, promoCode: $promoCode, discountAmount: $discountAmount)';
+  return 'PaymentModel(id: $id, membershipId: $membershipId, memberId: $memberId, amount: $amount, paymentMethod: $paymentMethod, status: $status, paymentDate: $paymentDate, transactionId: $transactionId, invoiceNumber: $invoiceNumber, notes: $notes, dueDate: $dueDate, promoCode: $promoCode, discountAmount: $discountAmount)';
 }
 
 
@@ -273,7 +275,7 @@ abstract mixin class _$PaymentModelCopyWith<$Res> implements $PaymentModelCopyWi
   factory _$PaymentModelCopyWith(_PaymentModel value, $Res Function(_PaymentModel) _then) = __$PaymentModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String membershipId, String amount, String paymentMethod, String status, DateTime? paymentDate, String? transactionId, String? invoiceNumber, String? notes, String? dueDate, String? promoCode, String? discountAmount
+ String id, String membershipId, String? memberId, String amount, String paymentMethod, String status, DateTime? paymentDate, String? transactionId, String? invoiceNumber, String? notes, String? dueDate, String? promoCode, String? discountAmount
 });
 
 
@@ -290,11 +292,12 @@ class __$PaymentModelCopyWithImpl<$Res>
 
 /// Create a copy of PaymentModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? membershipId = null,Object? amount = null,Object? paymentMethod = null,Object? status = null,Object? paymentDate = freezed,Object? transactionId = freezed,Object? invoiceNumber = freezed,Object? notes = freezed,Object? dueDate = freezed,Object? promoCode = freezed,Object? discountAmount = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? membershipId = null,Object? memberId = freezed,Object? amount = null,Object? paymentMethod = null,Object? status = null,Object? paymentDate = freezed,Object? transactionId = freezed,Object? invoiceNumber = freezed,Object? notes = freezed,Object? dueDate = freezed,Object? promoCode = freezed,Object? discountAmount = freezed,}) {
   return _then(_PaymentModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,membershipId: null == membershipId ? _self.membershipId : membershipId // ignore: cast_nullable_to_non_nullable
-as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as String,memberId: freezed == memberId ? _self.memberId : memberId // ignore: cast_nullable_to_non_nullable
+as String?,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as String,paymentMethod: null == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,paymentDate: freezed == paymentDate ? _self.paymentDate : paymentDate // ignore: cast_nullable_to_non_nullable
